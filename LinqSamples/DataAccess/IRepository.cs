@@ -49,7 +49,14 @@ namespace AnalyticsAdapter
 
         public Product[] GetAllProductsPurchased(int customerId)
         {
-            throw new NotImplementedException();
+            return GetOrders(customerId)
+                .Join(_db.Products, 
+                o => o.ProductId, 
+                p => p.Id, 
+                (o, p) => p)
+                .ToArray();
+
+            throw new InvalidOperationException();
         }
 
         public CustomerOverview GetCustomerOverview(int customerId)
@@ -109,6 +116,8 @@ namespace AnalyticsAdapter
             return _db.Orders
                 .Where(x => x.ProductId == productId)
                 .Count();
+
+            throw new InvalidOperationException();
         }
 
         public bool HasEverPurchasedProduct(int customerId, int productId)
