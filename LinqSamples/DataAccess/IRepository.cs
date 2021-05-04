@@ -7,10 +7,16 @@ namespace AnalyticsAdapter
     public class Repository : IRepository
     {
         private readonly Database _db;
+        private readonly Repository database;
 
         public Repository(Database db)
         {
             _db = db;
+        }
+
+        public Repository(Repository database)
+        {
+            this.database = database;
         }
 
         public Order[] GetOrders(int customerId)
@@ -55,7 +61,6 @@ namespace AnalyticsAdapter
                 Name = name,
                 TotalMoneySpent = GetMoneySpentBy(customerId),
                 FavoriteProductName = GetFavoriteProductName(customerId),
-                //
             };
         }
 
@@ -101,7 +106,9 @@ namespace AnalyticsAdapter
 
         public int GetTotalProductsPurchased(int productId)
         {
-            throw new NotImplementedException();
+            return _db.Orders
+                .Where(x => x.ProductId == productId)
+                .Count();
         }
 
         public bool HasEverPurchasedProduct(int customerId, int productId)
@@ -119,8 +126,6 @@ namespace AnalyticsAdapter
 
         public bool DidPurchaseAllProducts(int customerId, params int[] productIds)
         {
-            // 1,1,2,2,3
-            // 2,3
             return GetOrders(customerId)
                 .Select(o => o.ProductId)
                 .Distinct()

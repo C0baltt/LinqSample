@@ -1,8 +1,10 @@
 ﻿using System;
 using AnalyticsAdapter;
+
 class Program
 {
-    private static Database database = new();
+    
+    private static Repository database = new Repository(database);
     static void Main(string[] args)
     {
         bool alive = true;
