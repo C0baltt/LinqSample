@@ -73,7 +73,22 @@ namespace AnalyticsAdapter
 
         public List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId)
         {
-            throw new NotImplementedException();
+           return GetOrders(customerId).Join(_db.Products,
+            (o) => o.ProductId,
+            (p) => p.Id,
+            (o, p) => new
+            {
+                Id = o.Id,
+                ProductName = p.Name,
+            })
+                .GroupBy(ProductName => ProductName.ProductName)
+                .Select(g => new
+                {
+                    ProductName = g.Key,
+                    Count = g.Count(),
+                }).ToList<(T, U)>
+
+            throw new InvalidOperationException();
         }
 
         private string GetFavoriteProductName(int customerId)
