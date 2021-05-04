@@ -73,20 +73,21 @@ namespace AnalyticsAdapter
 
         public List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId)
         {
-           return GetOrders(customerId).Join(_db.Products,
-            (o) => o.ProductId,
-            (p) => p.Id,
-            (o, p) => new
-            {
-                Id = o.Id,
-                ProductName = p.Name,
-            })
-                .GroupBy(ProductName => ProductName.ProductName)
-                .Select(g => new
-                {
-                    ProductName = g.Key,
-                    Count = g.Count(),
-                }).ToList<(T, U)>
+            var result = GetOrders(customerId).Join(_db.Products,
+             (o) => o.ProductId,
+             (p) => p.Id,
+             (o, p) => new
+             {
+                 ProductName = p.Name,
+             })
+                 .GroupBy(ProductName => ProductName.ProductName)
+                 .Select(g => new
+                 {
+                     ProductName = g.Key,
+                     Count = g.Count(),
+                 }).ToList<ProductName, Count>;
+
+            return result;
 
             throw new InvalidOperationException();
         }
