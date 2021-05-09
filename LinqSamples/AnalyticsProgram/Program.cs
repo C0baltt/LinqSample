@@ -1,119 +1,58 @@
 ﻿using System;
-using AnalyticsAdapter;
+using System.Globalization;
+using System.IO;
+using System.Net;
+using System.Text;
 
-class Program
+namespace AnalyticsProgram
 {
-    
-    private static Repository database = new Repository(database);
-    static void Main(string[] args)
+    class Program
     {
-        bool alive = true;
-        while (alive)
+        static void Main(string[] args)
         {
-            Console.WriteLine();
-            Console.WriteLine("1. GetOrders                  \t 2. GetOrder                \t 3. GetAllProductsPurchased");
-            Console.WriteLine("4. GetUniqueProductsPurchased \t 5. HasEverPurchasedProduct \t 6. AreAllPurchasesHigherThan");
-            Console.WriteLine("7. DidPurchaseAllProducts     \t 8. GetMoneySpentBy         \t 9. Exit program ");
-            Console.WriteLine("Enter the item number:");
-            try
+            var scheduler = new JobScheduler.JobScheduler(5000);
+
+            scheduler.AddHandler(LogExecutionTimeInConsole);
+            scheduler.AddHandler(LogExecutionTimeInFile);
+            scheduler.AddHandler((_) => DownloadWebsite());
+
+            scheduler.Start();
+
+            Console.ReadKey();
+        }
+
+        private static void LogExecutionTimeInConsole(DateTime signalTime)
+        {
+            Console.WriteLine($"Executed: {signalTime}");
+        }
+
+        private static void LogExecutionTimeInFile(DateTime signalTime)
+        {
+            WriteToFile("ExecutionTimeLog.txt", signalTime.ToString(CultureInfo.InvariantCulture));
+        }
+
+        private static void DownloadWebsite()
+        {
+            WebClient client = new WebClient();
+            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+            string reply = client.DownloadString("https://stackoverflow.com/questions/26233/fastest-c-sharp-code-to-download-a-web-page");
+
+            WriteToFile("Stackoverflow.txt", reply);
+        }
+
+        private static void WriteToFile(string path, string text)
+        {
+            if (!File.Exists(path))
             {
-                int choice = Convert.ToInt32(Console.ReadLine());
-                switch (choice)
-                {
-                    case 1:
-                        GetOrders();
-                        break;
-                    case 2:
-                        GetOrder();
-                        break;
-                    case 3:
-                        GetAllProductsPurchased();
-                        break;
-                    case 4:
-                        GetUniqueProductsPurchased();
-                        break;
-                    case 5:
-                        HasEverPurchasedProduct();
-                        break;
-                    case 6:
-                        AreAllPurchasesHigherThan();
-                        break;
-                    case 7:
-                        DidPurchaseAllProducts();
-                        break;
-                    case 8:
-                        GetMoneySpentBy();
-                        break;
-                    case 9:
-                        alive = false;
-                        continue;
-                }
+                using var stream = File.Create(path);
+                byte[] info = new UTF8Encoding(true).GetBytes(text);
+                stream.Write(info, 0, info.Length);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine(ex.Message);
+                File.AppendAllText(path, text);
+                File.AppendAllText(path, Environment.NewLine);
             }
         }
-    }
-    private static void GetOrders()
-    {
-        Console.WriteLine("Enter customerId: ");
-        int customerId = Convert.ToInt32(Console.ReadLine());
-        database.GetOrders(customerId);
-    }
-    private static void GetOrder()
-    {
-        Console.WriteLine("Enter orderId: ");
-        int orderId = Convert.ToInt32(Console.ReadLine());
-        database.GetOrder(orderId);
-    }
-    private static void GetMoneySpentBy()
-    {
-        Console.WriteLine("Enter customerId: ");
-        int customerId = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine($"{database.GetMoneySpentBy(customerId)}");
-    }
-    private static void GetAllProductsPurchased()
-    {
-        Console.WriteLine("Enter customerId: ");
-        int customerId = Convert.ToInt32(Console.ReadLine());
-        database.GetAllProductsPurchased(customerId);
-    }
-    private static void GetUniqueProductsPurchased()
-    {
-        Console.WriteLine("Enter customerId: ");
-        int customerId = Convert.ToInt32(Console.ReadLine());
-        database.GetUniqueProductsPurchased(customerId);
-    }
-    private static void HasEverPurchasedProduct()
-    {
-        Console.WriteLine("Enter customerId: ");
-        int customerId = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine("Enter productId: ");
-        int productId = Convert.ToInt32(Console.ReadLine());
-        database.HasEverPurchasedProduct(customerId, productId);
-    }
-    private static void AreAllPurchasesHigherThan()
-    {
-        Console.WriteLine("Enter customerId: ");
-        int customerId = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine("Enter targetPrice: ");
-        decimal targetPrice = Convert.ToDecimal(Console.ReadLine());
-        Console.WriteLine($"{database.AreAllPurchasesHigherThan(customerId, targetPrice)}");
-    }
-    private static void DidPurchaseAllProducts()
-    {
-        Console.WriteLine("Enter customerId: ");
-        int customerId = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine("Enter size of array: ");
-        int size = Convert.ToInt32(Console.ReadLine());
-        int[] productIds = new int[size];
-        for (int i = 0; i < size; i++)
-        {
-            Console.WriteLine("Enter productId: ");
-            int productId = Convert.ToInt32(Console.ReadLine());
-            productIds[i] = productId;
-        }
-        Console.WriteLine($"{database.DidPurchaseAllProducts(customerId, productIds)}");
     }
 }

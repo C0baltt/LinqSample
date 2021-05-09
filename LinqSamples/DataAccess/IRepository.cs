@@ -6,24 +6,21 @@ namespace AnalyticsAdapter
 {
     public class Repository : IRepository
     {
-        private readonly Database _db;
-        private readonly Repository database;
+        private readonly IDatabase _db;
 
-        public Repository(Database db)
+        public Repository(IDatabase db)
         {
             _db = db;
         }
 
-        public Repository(Repository database)
+        public void AddOrder(int customerId, int productId)
         {
-            this.database = database;
+            _db.Orders.Add(new Order(_db.Orders.Count + 1, customerId, productId));
         }
 
         public Order[] GetOrders(int customerId)
         {
-            return _db.Orders
-                .Where(order => order.CustomerId == customerId)
-                .ToArray();
+            return GetOrdersInternal(customerId).ToArray();
         }
 
         public Order GetOrder(int orderId)
@@ -42,21 +39,14 @@ namespace AnalyticsAdapter
             return _db.Orders.Join(_db.Products,
                     (o) => o.ProductId,
                     (p) => p.Id,
-                    (o, p) => new { p.Price, o.CustomerId })
+                    (o, p) => new {p.Price, o.CustomerId})
                 .Where(x => x.CustomerId == customerId)
                 .Sum(x => x.Price);
         }
 
         public Product[] GetAllProductsPurchased(int customerId)
         {
-            return GetOrders(customerId)
-                .Join(_db.Products, 
-                o => o.ProductId, 
-                p => p.Id, 
-                (o, p) => p)
-                .ToArray();
-
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
         }
 
         public CustomerOverview GetCustomerOverview(int customerId)
@@ -73,28 +63,16 @@ namespace AnalyticsAdapter
 
         public List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId)
         {
-            new result = GetOrders(customerId).Join(_db.Products,
-             (o) => o.ProductId,
-             (p) => p.Id,
-             (o, p) => new
-             {
-                 ProductName = p.Name,
-             })
-                 .GroupBy(ProductName => ProductName.ProductName)
-                 .Select(g => new
-                 {
-                     ProductName = g.Key,
-                     Count = g.Count(),
-                 }).ToList();
-
-            return result;
-
-            throw new InvalidOperationException();
+            return GetProductOrdersJoined()
+                .GroupBy(x => x.order.ProductId)
+                .Select(g => (g.First().product.Name, g.Count()))
+                .ToList();
         }
 
         private string GetFavoriteProductName(int customerId)
         {
-            return GetOrders(customerId).Join(_db.Products,
+            return GetOrdersInternal(customerId)
+                .Join(_db.Products,
                     (o) => o.ProductId,
                     (p) => p.Id,
                     (o, p) => new
@@ -116,24 +94,12 @@ namespace AnalyticsAdapter
 
         public bool AreAllPurchasesHigherThan(int customerId, decimal targetPrice)
         {
-            return GetOrders(customerId)
-                .Join(_db.Products,
-                    (o) => o.ProductId,
-                    (p) => p.Id,
-                    (o, p) => new
-                    {
-                        p.Price,
-                    })
-                .All(x => x.Price > targetPrice);
+            return GetProductOrdersJoined().All(x => x.product.Price > targetPrice);
         }
 
         public int GetTotalProductsPurchased(int productId)
         {
-            return _db.Orders
-                .Where(x => x.ProductId == productId)
-                .Count();
-
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
         }
 
         public bool HasEverPurchasedProduct(int customerId, int productId)
@@ -143,8 +109,8 @@ namespace AnalyticsAdapter
 
         public Product[] GetUniqueProductsPurchased(int customerId)
         {
-            return GetOrders(customerId)
-                .Join(_db.Products, (o) => o.ProductId, (p) => p.Id, (o, p) => p)
+            return GetProductOrdersJoined()
+                .Select(x => x.product)
                 .Distinct()
                 .ToArray();
         }
@@ -157,10 +123,22 @@ namespace AnalyticsAdapter
                 .Intersect(productIds)
                 .Count() == productIds.Count();
         }
+
+        private IEnumerable<Order> GetOrdersInternal(int customerId)
+        {
+            return _db.Orders.Where(order => order.CustomerId == customerId);
+        }
+
+        private IEnumerable<(Product product, Order order)> GetProductOrdersJoined()
+        {
+            return _db.Orders.Join(_db.Products, (o) => o.ProductId, (p) => p.Id, (o, p) => (p, o));
+        }
     }
 
     public interface IRepository
     {
+        void AddOrder(int customerId, int productId);
+
         Order[] GetOrders(int customerId);
 
         Order GetOrder(int orderId);
