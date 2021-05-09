@@ -1,17 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AnalyticsAdapter;
 using FluentAssertions;
 using Xunit;
 
 namespace DataAccess.Tests
 {
-    public class FakeDatabase : IDatabase
-    {
-        public List<Customer> Customers { get; set; } = new List<Customer>();
-        public List<Order> Orders { get; set; } = new List<Order>();
-        public List<Product> Products { get; set; } = new List<Product>();
-    }
-
     [Collection("Repository")]
     public class RepositoryTests
     {
@@ -73,7 +67,7 @@ namespace DataAccess.Tests
 
             db.Products.Add(new Product(1, "Phone", 500));
             db.Products.Add(new Product(2, "Notebook", 1000));
-            
+
             db.Customers.Add(new Customer(1, "Mike"));
 
             var repository = new Repository(db);
@@ -84,7 +78,7 @@ namespace DataAccess.Tests
             // assert
             MoneySpentBy.Should().Be(1500);
         }
-        
+
         [Fact]
         public void GetAllProductsPurchased_ForExistingCustomer_ReturnsResult()
         {
@@ -92,21 +86,78 @@ namespace DataAccess.Tests
             var db = new FakeDatabase();
             db.Orders.Add(new Order(1, 1, 1));
             db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 2, 1));
 
             db.Products.Add(new Product(1, "Phone", 500));
             db.Products.Add(new Product(2, "Notebook", 1000));
-            
+
             db.Customers.Add(new Customer(1, "Mike"));
 
             var repository = new Repository(db);
 
             // act
-            var MoneySpentBy = repository.GetMoneySpentBy(1);
+            var AllProductsPurchased = repository.GetAllProductsPurchased(1);
 
             // assert
-            MoneySpentBy.Should().Be(1500);
+            AllProductsPurchased.Should()
+                .BeEquivalentTo(new Product(1, "Phone", 500),
+                                new Product(2, "Notebook", 1000),
+                                new Product(2, "Notebook", 1000));
         }
 
+        [Fact]
+        public void GetAllProductsPurchased_ForNonExistingCustomer_ReturnsExeption()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 2, 1));
 
+            db.Products.Add(new Product(1, "Phone", 500));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            // act
+            Action act = () => repository.GetAllProductsPurchased(200);
+
+            // assert
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(act);
+        }
+
+        [Fact]
+        public void GetCustomerOverview_ForExistingCustomer_ReturnsResult()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 1, 1));
+
+            db.Products.Add(new Product(1, "Phone", 500));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            var customerOverview = new CustomerOverview();
+            customerOverview.TotalMoneySpent = 2000;
+            customerOverview.Name = "Mike";
+            customerOverview.FavoriteProductName = "Phone";
+
+            // act
+            var CustomerOverview = repository.GetCustomerOverview(1);
+
+            // assert
+            CustomerOverview.Should().BeEquivalentTo(customerOverview);
+        }
+
+        /*.BeEquivalentTo((CustomerOverview.Name == "Mike"),
+                (CustomerOverview.TotalMoneySpent == 2000),
+                (CustomerOverview.FavoriteProductName == "Phone"));*/
     }
 }
