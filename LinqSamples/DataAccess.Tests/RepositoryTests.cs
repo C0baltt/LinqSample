@@ -62,5 +62,51 @@ namespace DataAccess.Tests
             // assert
             orders.Should().BeEquivalentTo(new Order(1, 1, 1));
         }
+
+        [Fact]
+        public void GetMoneySpentBy_ForExistingCustomerByTwoOrders_ReturnsResult()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+
+            db.Products.Add(new Product(1, "Phone", 500));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+            
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            // act
+            var MoneySpentBy = repository.GetMoneySpentBy(1);
+
+            // assert
+            MoneySpentBy.Should().Be(1500);
+        }
+        
+        [Fact]
+        public void GetAllProductsPurchased_ForExistingCustomer_ReturnsResult()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+
+            db.Products.Add(new Product(1, "Phone", 500));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+            
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            // act
+            var MoneySpentBy = repository.GetMoneySpentBy(1);
+
+            // assert
+            MoneySpentBy.Should().Be(1500);
+        }
+
+
     }
 }
