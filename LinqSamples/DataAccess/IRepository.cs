@@ -73,7 +73,7 @@ namespace AnalyticsAdapter
 
         public List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId)
         {
-            var result = GetOrders(customerId).Join(_db.Products,
+            new result = GetOrders(customerId).Join(_db.Products,
              (o) => o.ProductId,
              (p) => p.Id,
              (o, p) => new
@@ -85,7 +85,7 @@ namespace AnalyticsAdapter
                  {
                      ProductName = g.Key,
                      Count = g.Count(),
-                 }).ToList<ProductName, Count>;
+                 }).ToList();
 
             return result;
 
