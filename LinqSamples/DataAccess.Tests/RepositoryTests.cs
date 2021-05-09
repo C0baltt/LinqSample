@@ -96,10 +96,10 @@ namespace DataAccess.Tests
             var repository = new Repository(db);
 
             // act
-            var AllProductsPurchased = repository.GetAllProductsPurchased(1);
+            var allProductsPurchased = repository.GetAllProductsPurchased(1);
 
             // assert
-            AllProductsPurchased.Should()
+            allProductsPurchased.Should()
                 .BeEquivalentTo(new Product(1, "Phone", 500),
                                 new Product(2, "Notebook", 1000),
                                 new Product(2, "Notebook", 1000));
@@ -137,27 +137,84 @@ namespace DataAccess.Tests
             db.Orders.Add(new Order(2, 2, 1));
             db.Orders.Add(new Order(3, 1, 1));
 
-            db.Products.Add(new Product(1, "Phone", 500));
+            db.Products.Add(new Product(1, "Phone", 250));
             db.Products.Add(new Product(2, "Notebook", 1000));
 
             db.Customers.Add(new Customer(1, "Mike"));
 
             var repository = new Repository(db);
 
-            var customerOverview = new CustomerOverview();
-            customerOverview.TotalMoneySpent = 2000;
-            customerOverview.Name = "Mike";
-            customerOverview.FavoriteProductName = "Phone";
-
             // act
-            var CustomerOverview = repository.GetCustomerOverview(1);
+            var customerOverview = repository.GetCustomerOverview(1);
 
             // assert
-            CustomerOverview.Should().BeEquivalentTo(customerOverview);
+            var customerOverviewSample = new CustomerOverview();
+            customerOverviewSample.TotalMoneySpent = 1500;
+            customerOverviewSample.Name = "Mike";
+            customerOverviewSample.FavoriteProductName = "Phone";
+
+            customerOverview.Should().BeEquivalentTo(customerOverviewSample);
+        }
+        
+        [Fact]
+        public void GetFavoriteProductName_ForExistingCustomer_ReturnsResult()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 1, 1));
+
+            db.Products.Add(new Product(1, "Phone", 250));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            // act
+            var productsPurchased = repository.GetProductsPurchased(1);
+
+            // assert
+            var productsPurchasedSample = new List<(string, int)>
+            {
+                ("Phone", 2),
+                ("Notebook", 1)
+            };
+
+            productsPurchased.Should()
+                .BeEquivalentTo(productsPurchasedSample);
+        }
+        
+        [Fact]
+        public void AreAllPurchasesHigherThan_ForExistingCustomer_ReturnsResult()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 1, 1));
+
+            db.Products.Add(new Product(1, "Phone", 900));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            // act
+            var isHigher = repository.AreAllPurchasesHigherThan(1, 899);
+
+            // assert
+            var productsPurchasedSample = new List<(string, int)>
+            {
+                ("Phone", 2),
+                ("Notebook", 1)
+            };
+
+            isHigher.Should().Be(true);
         }
 
-        /*.BeEquivalentTo((CustomerOverview.Name == "Mike"),
-                (CustomerOverview.TotalMoneySpent == 2000),
-                (CustomerOverview.FavoriteProductName == "Phone"));*/
+        
     }
 }

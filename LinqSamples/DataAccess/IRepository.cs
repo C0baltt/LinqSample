@@ -68,7 +68,8 @@ namespace AnalyticsAdapter
             };
         }
 
-        public List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId)
+        public List<(string productName, int numberOfPurchases)> 
+            GetProductsPurchased(int customerId)
         {
             return GetProductOrdersJoined()
                 .GroupBy(x => x.order.ProductId)
@@ -101,7 +102,8 @@ namespace AnalyticsAdapter
 
         public bool AreAllPurchasesHigherThan(int customerId, decimal targetPrice)
         {
-            return GetProductOrdersJoined().All(x => x.product.Price > targetPrice);
+            return GetProductOrdersJoined()
+                .All(x => x.product.Price > targetPrice);
         }
 
         public int GetTotalProductsPurchased(int productId)
