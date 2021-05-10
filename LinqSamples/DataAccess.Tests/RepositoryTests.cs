@@ -106,29 +106,6 @@ namespace DataAccess.Tests
         }
 
         [Fact]
-        public void GetAllProductsPurchased_ForNonExistingCustomer_ReturnsExeption()
-        {
-            // arrange
-            var db = new FakeDatabase();
-            db.Orders.Add(new Order(1, 1, 1));
-            db.Orders.Add(new Order(2, 2, 1));
-            db.Orders.Add(new Order(3, 2, 1));
-
-            db.Products.Add(new Product(1, "Phone", 500));
-            db.Products.Add(new Product(2, "Notebook", 1000));
-
-            db.Customers.Add(new Customer(1, "Mike"));
-
-            var repository = new Repository(db);
-
-            // act
-            Action act = () => repository.GetAllProductsPurchased(200);
-
-            // assert
-            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(act);
-        }
-
-        [Fact]
         public void GetCustomerOverview_ForExistingCustomer_ReturnsResult()
         {
             // arrange
@@ -309,12 +286,77 @@ namespace DataAccess.Tests
             var repository = new Repository(db);
 
             // act
-            var totalProductsPurchased = repository.GetUniqueProductsPurchased(1);
+            var productsPurchased = repository.GetUniqueProductsPurchased(1);
 
             // assert
-            totalProductsPurchased.Should().HaveCount(3);
+            productsPurchased.Should().HaveCount(3);
+        }
+
+        [Fact]
+        public void GetUniqueProductsPurchased_ForNonExistingCustomer_ReturnsZero()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            
+            db.Products.Add(new Product(1, "Phone", 900));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+           
+            var repository = new Repository(db);
+
+            // act
+            var productsPurchased = repository.GetUniqueProductsPurchased(2);
+
+            // assert
+            productsPurchased.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public void HasEverPurchasedProduct_ForExistingCustomerAndProducts_ReturnsTrue()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 2, 1));
+
+            db.Products.Add(new Product(1, "Phone", 900));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+           
+            var repository = new Repository(db);
+
+            // act
+            var productsPurchased = repository.HasEverPurchasedProduct(1,1);
+
+            // assert
+            productsPurchased.Should().Be(true);
+        }
+
+        [Fact]
+        public void HasEverPurchasedProduct_ForExistingNonCustomerAndProducts_ReturnsFalse()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            
+            db.Products.Add(new Product(1, "Phone", 900));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+           
+            var repository = new Repository(db);
+
+            // act
+            var productsPurchased = repository.HasEverPurchasedProduct(2,2);
+
+            // assert
+            productsPurchased.Should().Be(false);
         }
       
-        
     }
 }
