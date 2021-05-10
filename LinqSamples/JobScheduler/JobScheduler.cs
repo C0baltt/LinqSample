@@ -12,7 +12,7 @@ namespace JobScheduler
     public class JobScheduler
     {
         private readonly Timer _timer;
-        private readonly List<Action<DateTime>> _actions = new();
+        private readonly List<IJob> _jobs = new List<IJob>();
 
         public JobScheduler(int intervalMs)
         {
@@ -22,9 +22,9 @@ namespace JobScheduler
             _timer.Enabled = false;
         }
 
-        public void AddHandler(Action<DateTime> action)
+        public void AddHandler(IJob action)
         {
-            _actions.Add(action);
+            _jobs.Add(action);
         }
 
         public void Start() => _timer.Start();
@@ -32,9 +32,9 @@ namespace JobScheduler
 
         private void OnTimedEvent(object sender, ElapsedEventArgs @event)
         {
-            foreach (var action in _actions)
+            foreach (var job in _jobs)
             {
-                action?.Invoke(@event.SignalTime);
+                job.Execute(@event.SignalTime);
             }
         }
     }

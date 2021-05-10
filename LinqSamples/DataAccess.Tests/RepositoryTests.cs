@@ -183,12 +183,6 @@ namespace DataAccess.Tests
             var isHigher = repository.AreAllPurchasesHigherThan(1, 899);
 
             // assert
-            var productsPurchasedSample = new List<(string, int)>
-            {
-                ("Phone", 2),
-                ("Notebook", 1)
-            };
-
             isHigher.Should().Be(true);
         }
          
@@ -212,12 +206,6 @@ namespace DataAccess.Tests
             var isHigher = repository.AreAllPurchasesHigherThan(1, 900);
 
             // assert
-            var productsPurchasedSample = new List<(string, int)>
-            {
-                ("Phone", 2),
-                ("Notebook", 1)
-            };
-
             isHigher.Should().Be(false);
         }
 
