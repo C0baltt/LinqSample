@@ -71,7 +71,7 @@ namespace AnalyticsAdapter
         public List<(string productName, int numberOfPurchases)> 
             GetProductsPurchased(int customerId)
         {
-            return GetProductOrdersJoined()
+            return GetProductOrdersJoined(customerId)
                 .GroupBy(x => x.order.ProductId)
                 .Select(g => (g.First().product.Name, g.Count()))
                 .ToList();
@@ -102,7 +102,7 @@ namespace AnalyticsAdapter
 
         public bool AreAllPurchasesHigherThan(int customerId, decimal targetPrice)
         {
-            return GetProductOrdersJoined()
+            return GetProductOrdersJoined(customerId)
                 .All(x => x.product.Price > targetPrice);
         }
 
@@ -123,7 +123,7 @@ namespace AnalyticsAdapter
 
         public Product[] GetUniqueProductsPurchased(int customerId)
         {
-            return GetProductOrdersJoined()
+            return GetProductOrdersJoined(customerId)
                 .Select(x => x.product)
                 .Distinct()
                 .ToArray();
@@ -143,9 +143,9 @@ namespace AnalyticsAdapter
             return _db.Orders.Where(order => order.CustomerId == customerId);
         }
 
-        private IEnumerable<(Product product, Order order)> GetProductOrdersJoined()
+        private IEnumerable<(Product product, Order order)> GetProductOrdersJoined(int customerId)
         {
-            return _db.Orders.Join(_db.Products,
+            return GetOrdersInternal(customerId).Join(_db.Products,
                 (o) => o.ProductId,
                 (p) => p.Id,
                 (o, p) => (p, o));
