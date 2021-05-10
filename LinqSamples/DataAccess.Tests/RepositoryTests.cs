@@ -80,7 +80,7 @@ namespace DataAccess.Tests
         }
 
         [Fact]
-        public void GetAllProductsPurchased_ForExistingCustomer_ReturnsResult()
+        public void GetAllProductsPurchased_ForExistingCustomerByThreeOrders_ReturnsResult()
         {
             // arrange
             var db = new FakeDatabase();
@@ -187,7 +187,7 @@ namespace DataAccess.Tests
         }
         
         [Fact]
-        public void AreAllPurchasesHigherThan_ForExistingCustomer_ReturnsResult()
+        public void AreAllPurchasesHigherThan_ForExistingCustomer_ReturnsTrue()
         {
             // arrange
             var db = new FakeDatabase();
@@ -213,6 +213,108 @@ namespace DataAccess.Tests
             };
 
             isHigher.Should().Be(true);
+        }
+         
+        [Fact]
+        public void AreAllPurchasesHigherThan_ForExistingCustomer_ReturnsTFalse()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 1, 1));
+
+            db.Products.Add(new Product(1, "Phone", 900));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            // act
+            var isHigher = repository.AreAllPurchasesHigherThan(1, 900);
+
+            // assert
+            var productsPurchasedSample = new List<(string, int)>
+            {
+                ("Phone", 2),
+                ("Notebook", 1)
+            };
+
+            isHigher.Should().Be(false);
+        }
+
+      [Fact]
+        public void GetTotalProductsPurchased_ForExistingProduct_ReturnsResult()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 1, 1));
+
+            db.Products.Add(new Product(1, "Phone", 900));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            // act
+            var totalProductsPurchased = repository.GetTotalProductsPurchased(1);
+
+            // assert
+            totalProductsPurchased.Should().Be(2);
+        }
+
+        [Fact]
+        public void GetUniqueProductsPurchased_ForExistingCustomer_ReturnsArrayOfProducts()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 3, 1));
+            db.Orders.Add(new Order(4, 2, 1));
+            db.Orders.Add(new Order(5, 1, 2));
+
+            db.Products.Add(new Product(1, "Phone", 900));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+            db.Products.Add(new Product(3, "XBox", 1500));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+            db.Customers.Add(new Customer(2, "Nick"));
+
+            var repository = new Repository(db);
+
+            // act
+            var totalProductsPurchased = repository.GetUniqueProductsPurchased(1);
+
+            // assert
+            totalProductsPurchased.Should().Be(0);
+        }
+        
+      [Fact]
+        public void GetTotalProductsPurchased_ForNonExistingProduct_ReturnsZero()
+        {
+            // arrange
+            var db = new FakeDatabase();
+            db.Orders.Add(new Order(1, 1, 1));
+            db.Orders.Add(new Order(2, 2, 1));
+            db.Orders.Add(new Order(3, 1, 1));
+
+            db.Products.Add(new Product(1, "Phone", 900));
+            db.Products.Add(new Product(2, "Notebook", 1000));
+
+            db.Customers.Add(new Customer(1, "Mike"));
+
+            var repository = new Repository(db);
+
+            // act
+            var totalProductsPurchased = repository.GetTotalProductsPurchased(1200);
+
+            // assert
+            totalProductsPurchased.Should().Be(0);
         }
 
         

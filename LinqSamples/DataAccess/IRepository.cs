@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -117,7 +117,8 @@ namespace AnalyticsAdapter
 
         public bool HasEverPurchasedProduct(int customerId, int productId)
         {
-            return GetOrders(customerId).Any(x => x.ProductId == productId);
+            return GetOrders(customerId)
+                .Any(x => x.ProductId == productId);
         }
 
         public Product[] GetUniqueProductsPurchased(int customerId)
@@ -144,7 +145,10 @@ namespace AnalyticsAdapter
 
         private IEnumerable<(Product product, Order order)> GetProductOrdersJoined()
         {
-            return _db.Orders.Join(_db.Products, (o) => o.ProductId, (p) => p.Id, (o, p) => (p, o));
+            return _db.Orders.Join(_db.Products,
+                (o) => o.ProductId,
+                (p) => p.Id,
+                (o, p) => (p, o));
         }
     }
 
