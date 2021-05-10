@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AnalyticsProgram
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -14,7 +14,7 @@ namespace AnalyticsProgram
 
             scheduler.AddHandler(new WebSiteDoenloadJob("https://tut.by"));
             scheduler.AddHandler(new ExecutionTimeFileLoggerJob());
-            
+
             scheduler.Start();
 
             Console.ReadKey();

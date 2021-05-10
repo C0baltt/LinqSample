@@ -4,12 +4,17 @@ using System.Timers;
 
 namespace JobScheduler
 {
-    interface IJob
+    public interface IJobScheduler
+    {
+
+    }
+
+   public interface IJob
     {
         void Execute(DateTime signalTime);
     }
 
-    public class JobScheduler
+    public class JobScheduler : IJobScheduler
     {
         private readonly Timer _timer;
         private readonly List<IJob> _jobs = new List<IJob>();

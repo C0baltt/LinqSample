@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnalyticsProgram
 {
-    class WebSiteDoenloadJob : IJob
+    public class WebSiteDoenloadJob : IJob
     {
         private string _siteName;
 
