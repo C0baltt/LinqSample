@@ -12,8 +12,8 @@ namespace AnalyticsProgram
         {
             var scheduler = new JobScheduler.JobScheduler(5000);
 
-            scheduler.AddHandler(new WebSiteDoenloadJob("https://tut.by"));
-            scheduler.AddHandler(new ExecutionTimeFileLoggerJob());
+            scheduler.AddHandler(new WebSiteDownloadJob("https://tut.by"));
+            scheduler.AddHandler(new ExecutionTimeFileLoggerJob()); 
 
             scheduler.Start();
 

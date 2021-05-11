@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using JobScheduler;
+using System.Net;
 
 namespace AnalyticsProgram
 {
-    public class WebSiteDoenloadJob : IJob
+    public class WebSiteDownloadJob : IJob
     {
         private string _siteName;
 
-        public WebSiteDoenloadJob(string siteName)
+        public WebSiteDownloadJob(string siteName)
         {
             _siteName = siteName;
         }

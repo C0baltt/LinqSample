@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using JobScheduler;
+using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace AnalyticsProgram
 {
    public class ExecutionTimeFileLoggerJob : IJob
     {
-
-        public void Execution(DateTime signalTime)
+        public void Execute(DateTime signalTime)
         {
             Program.WriteToFile("ExecutionTimeLog.txt", signalTime.ToString(CultureInfo.InvariantCulture));
         }
