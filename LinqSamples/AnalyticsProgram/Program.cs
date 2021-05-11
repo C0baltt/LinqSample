@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Net;
-using System.Text;
+using JobScheduler;
 
 namespace AnalyticsProgram
 {
@@ -14,30 +11,11 @@ namespace AnalyticsProgram
 
             scheduler.AddHandler(new WebSiteDownloadJob("https://tut.by"));
             scheduler.AddHandler(new ExecutionTimeFileLoggerJob()); 
+            scheduler.AddHandler(new WriteToConsole()); 
 
             scheduler.Start();
 
             Console.ReadKey();
-        }
-
-        private static void LogExecutionTimeInConsole(DateTime signalTime)
-        {
-            Console.WriteLine($"Executed: {signalTime}");
-        }
-
-        private static void WriteToFile(string path, string text)
-        {
-            if (!File.Exists(path))
-            {
-                using var stream = File.Create(path);
-                byte[] info = new UTF8Encoding(true).GetBytes(text);
-                stream.Write(info, 0, info.Length);
-            }
-            else
-            {
-                File.AppendAllText(path, text);
-                File.AppendAllText(path, Environment.NewLine);
-            }
         }
     }
 }

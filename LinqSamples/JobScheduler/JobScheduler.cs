@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Timers;
 
 namespace JobScheduler
 {
-   public interface IJob
-    {
-        void Execute(DateTime signalTime);
-    }
-
     public class JobScheduler 
     {
         private readonly Timer _timer;
