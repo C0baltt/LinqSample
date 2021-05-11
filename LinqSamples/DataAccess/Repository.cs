@@ -140,11 +140,35 @@ namespace AnalyticsAdapter
                 .Count() == productIds.Count();
         }
 
-        public void GetAllPurchasesEveryCustomer()
+        public List<(string productName, int numberOfPurchases)> GetAllPurchasesEveryCustomer()
         {
-
+            _db.Customers.Select(i => i.Id > 0)
+                //GetProductsPurchased(customerId)
+                    //.ToList();
+            
+           
         }
 
+        /* public List<(string productName, int numberOfPurchases)>
+            GetProductsPurchased(int customerId)
+        {
+            return GetProductOrdersJoined(customerId)
+                .GroupBy(x => x.order.ProductId)
+                .Select(g => (g.First().product.Name, g.Count()))
+                .ToList();
+        }
+        
+         public Product[] GetAllProductsPurchased(int customerId)
+        {
+            return GetOrders(customerId)
+                .Join(_db.Products,
+                o => o.ProductId,
+                p => p.Id,
+                (o, p) => p)
+                .ToArray();
+
+            throw new InvalidOperationException();
+        }*/
         private IEnumerable<Order> GetOrdersInternal(int customerId)
         {
             return _db.Orders.Where(order => order.CustomerId == customerId);
