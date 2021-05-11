@@ -30,5 +30,7 @@ namespace AnalyticsAdapter
         CustomerOverview GetCustomerOverview(int customerId);
 
         List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId);
-    }
+
+        void GetAllPurchasesEveryCustomer();
+    }//Get All Purchases Every Customer
 }

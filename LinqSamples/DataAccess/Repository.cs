@@ -140,6 +140,11 @@ namespace AnalyticsAdapter
                 .Count() == productIds.Count();
         }
 
+        public void GetAllPurchasesEveryCustomer()
+        {
+
+        }
+
         private IEnumerable<Order> GetOrdersInternal(int customerId)
         {
             return _db.Orders.Where(order => order.CustomerId == customerId);
@@ -153,5 +158,4 @@ namespace AnalyticsAdapter
                 (o, p) => (p, o));
         }
     }
-
 }
