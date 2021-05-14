@@ -31,6 +31,6 @@ namespace AnalyticsAdapter
 
         List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId);
 
-        //int GetAllPurchasesEveryCustomer();
+        List<ProductsOverView> GetAllPurchasesEveryCustomer();
     }
 }
