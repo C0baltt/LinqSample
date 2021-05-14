@@ -2,11 +2,18 @@ using System.Collections.Generic;
 
 namespace AnalyticsAdapter
 {
-    public class Database
+    public interface IDatabase
     {
-        public List<Customer> Customers { get; set; }
-        public List<Order> Orders { get; set; }
-        public List<Product> Products { get; set; }
+        List<Customer> Customers { get; set; }
+        List<Order> Orders { get; set; }
+        List<Product> Products { get; set; }
+    }
+
+    public class Database : IDatabase
+    {
+        public List<Customer> Customers { get; set; } = new List<Customer>();
+        public List<Order> Orders { get; set; } = new List<Order>();
+        public List<Product> Products { get; set; } = new List<Product>();
 
         public Database()
         {
