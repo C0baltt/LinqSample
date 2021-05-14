@@ -7,6 +7,7 @@ namespace AnalyticsProgram
     public class WebSiteDownloadJob : IJob
     {
         private readonly string _siteName;
+        private const string WebSiteDownload = "WebSiteDownload.txt";
 
         public WebSiteDownloadJob(string siteName)
         {
@@ -18,7 +19,7 @@ namespace AnalyticsProgram
             var client = new WebClient();
             client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
             var reply = client.DownloadString(_siteName);
-            WriteFile.WriteToFile("WebSiteDownload.txt", reply);
+            WriteFile.WriteToFile(WebSiteDownload, reply);
         }
     }
 }

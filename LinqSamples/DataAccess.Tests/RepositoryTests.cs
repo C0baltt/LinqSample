@@ -6,7 +6,6 @@ using Xunit;
 
 namespace DataAccess.Tests
 {
-    [Collection("Repository")]
     public class RepositoryTests
     {
         [Fact]
@@ -29,7 +28,6 @@ namespace DataAccess.Tests
             // arrange
             var db = new FakeDatabase();
             var repository = new Repository(db);
-            var countBefore = db.Orders.Count;
 
             // act
             repository.AddOrder(1, 1);
@@ -38,7 +36,7 @@ namespace DataAccess.Tests
 
             // assert
             var countsAfter = db.Orders.Count;
-            countsAfter.Should().Be(countBefore + 3);
+            countsAfter.Should().Be(3);
         }
 
         [Fact]
@@ -125,12 +123,12 @@ namespace DataAccess.Tests
             var customerOverview = repository.GetCustomerOverview(1);
 
             // assert
-            var customerOverviewSample = new CustomerOverview();
-            customerOverviewSample.TotalMoneySpent = 1500;
-            customerOverviewSample.Name = "Mike";
-            customerOverviewSample.FavoriteProductName = "Phone";
-
-            customerOverview.Should().BeEquivalentTo(customerOverviewSample);
+            customerOverview.Should().BeEquivalentTo(new CustomerOverview
+            {
+               TotalMoneySpent = 1500,
+                Name = "Mike",
+                FavoriteProductName = "Phone",
+            });
         }
         
         [Fact]
@@ -183,11 +181,11 @@ namespace DataAccess.Tests
             var isHigher = repository.AreAllPurchasesHigherThan(1, 899);
 
             // assert
-            isHigher.Should().Be(true);
+            isHigher.Should().BeTrue();
         }
          
         [Fact]
-        public void AreAllPurchasesHigherThan_ForExistingCustomer_ReturnsTFalse()
+        public void AreAllPurchasesHigherThan_ForExistingCustomer_ReturnsFalse()
         {
             // arrange
             var db = new FakeDatabase();
@@ -206,7 +204,7 @@ namespace DataAccess.Tests
             var isHigher = repository.AreAllPurchasesHigherThan(1, 900);
 
             // assert
-            isHigher.Should().Be(false);
+            isHigher.Should().BeFalse();
         }
 
       [Fact]
@@ -261,15 +259,17 @@ namespace DataAccess.Tests
             // arrange
             var db = new FakeDatabase();
             db.Orders.Add(new Order(1, 1, 1));
-            db.Orders.Add(new Order(2, 2, 1));
-            db.Orders.Add(new Order(3, 3, 1));
+            db.Orders.Add(new Order(2, 3, 1));
+            db.Orders.Add(new Order(3, 2, 1));
             db.Orders.Add(new Order(4, 3, 1));
+            db.Orders.Add(new Order(5, 3, 2));
             
             db.Products.Add(new Product(1, "Phone", 900));
             db.Products.Add(new Product(2, "Notebook", 1000));
             db.Products.Add(new Product(3, "XBox", 1500));
 
             db.Customers.Add(new Customer(1, "Mike"));
+            db.Customers.Add(new Customer(2, "Nick"));
            
             var repository = new Repository(db);
 
@@ -277,7 +277,10 @@ namespace DataAccess.Tests
             var productsPurchased = repository.GetUniqueProductsPurchased(1);
 
             // assert
-            productsPurchased.Should().HaveCount(3);
+            productsPurchased.Should()
+                .BeEquivalentTo(new Product(1, "Phone", 900),
+                                new Product(2, "Notebook", 1000),
+                                new Product(3, "XBox", 1500));
         }
 
         [Fact]
@@ -299,7 +302,7 @@ namespace DataAccess.Tests
             var productsPurchased = repository.GetUniqueProductsPurchased(2);
 
             // assert
-            productsPurchased.Should().HaveCount(0);
+            productsPurchased.Should().BeEmpty();
         }
 
         [Fact]
@@ -322,7 +325,7 @@ namespace DataAccess.Tests
             var productsPurchased = repository.HasEverPurchasedProduct(1,1);
 
             // assert
-            productsPurchased.Should().Be(true);
+            productsPurchased.Should().BeTrue();
         }
 
         [Fact]
@@ -343,7 +346,7 @@ namespace DataAccess.Tests
             var productsPurchased = repository.HasEverPurchasedProduct(2,2);
 
             // assert
-            productsPurchased.Should().Be(false);
+            productsPurchased.Should().BeFalse();
         }
       
     }
