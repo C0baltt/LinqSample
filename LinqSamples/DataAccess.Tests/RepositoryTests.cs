@@ -12,15 +12,13 @@ namespace DataAccess.Tests
         public void GetOrders_ForExistingCustomer_ReturnsResult()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            //db.Orders.Add(new Order(1, 1, 1));
-            mock.Setup(repo => repo.Products).Returns(new List<Product>());
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>());
-            mock.Setup(repo => repo.Orders).Returns(new List<Order> { new Order(1, 1, 1) });
+            mockDb.Setup(x => x.Products).Returns(new List<Product>());
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>());
+            mockDb.Setup(x => x.Orders).Returns(new List<Order> { new Order(1, 1, 1) });
 
-            //var repository = new Repository(mock.Object);
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var orders = repository.GetOrders(1);
@@ -33,13 +31,13 @@ namespace DataAccess.Tests
         public void GetOrders_ForNonExistingCustomer_ReturnsEmptyResult()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Products).Returns(new List<Product>());
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>());
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>());
+            mockDb.Setup(x => x.Products).Returns(new List<Product>());
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>());
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>());
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var orders = repository.GetOrders(-1);
@@ -52,13 +50,13 @@ namespace DataAccess.Tests
         public void AddOrder_Always_AddedSuccessfully()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Products).Returns(new List<Product>());
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>());
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>());
+            mockDb.Setup(x => x.Products).Returns(new List<Product>());
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>());
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>());
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             repository.AddOrder(1, 1);
@@ -66,25 +64,25 @@ namespace DataAccess.Tests
             repository.AddOrder(1, 1);
 
             // assert
-            mock.Object.Orders.Count.Should().Be(3);
+            mockDb.Object.Orders.Count.Should().Be(3);
         }
 
         [Fact]
         public void GetMoneySpentBy_ForExistingCustomerByTwoOrders_ReturnsResult()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 500),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var moneySpentBy = repository.GetMoneySpentBy(1);
@@ -97,19 +95,19 @@ namespace DataAccess.Tests
         public void GetAllProductsPurchased_ForExistingCustomerByThreeOrders_ReturnsResult()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1),
               new Order(3, 2, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 500),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var allProductsPurchased = repository.GetAllProductsPurchased(1);
@@ -125,19 +123,19 @@ namespace DataAccess.Tests
         public void GetCustomerOverview_ForExistingCustomer_ReturnsResult()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1),
               new Order(3, 2, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 250),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var customerOverview = repository.GetCustomerOverview(1);
@@ -155,19 +153,19 @@ namespace DataAccess.Tests
         public void GetFavoriteProductName_ForExistingCustomer_ReturnsResult()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1),
               new Order(3, 1, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 250),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var productsPurchased = repository.GetProductsPurchased(1);
@@ -185,19 +183,19 @@ namespace DataAccess.Tests
         public void AreAllPurchasesHigherThan_ForExistingCustomer_ReturnsTrue()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1),
               new Order(3, 1, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 900),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var isHigher = repository.AreAllPurchasesHigherThan(1, 899);
@@ -210,19 +208,19 @@ namespace DataAccess.Tests
         public void AreAllPurchasesHigherThan_ForExistingCustomer_ReturnsFalse()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1),
               new Order(3, 1, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 900),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var isHigher = repository.AreAllPurchasesHigherThan(1, 900);
@@ -235,19 +233,19 @@ namespace DataAccess.Tests
         public void GetTotalProductsPurchased_ForExistingProduct_ReturnsResult()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1),
               new Order(3, 1, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 900),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var totalProductsPurchased = repository.GetTotalProductsPurchased(1);
@@ -260,19 +258,19 @@ namespace DataAccess.Tests
         public void GetTotalProductsPurchased_ForNonExistingProduct_ReturnsZero()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1),
               new Order(3, 1, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 900),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var totalProductsPurchased = repository.GetTotalProductsPurchased(1200);
@@ -285,23 +283,23 @@ namespace DataAccess.Tests
         public void GetUniqueProductsPurchased_ForExistingCustomer_ReturnsArrayOfProducts()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 3, 1),
               new Order(3, 2, 1),
               new Order(4, 3, 1),
               new Order(5, 3, 2)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 900),
               new Product(2, "Notebook", 1000),
               new Product(3, "XBox", 1500)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike"),
               new Customer(2, "Nick")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var productsPurchased = repository.GetUniqueProductsPurchased(1);
@@ -317,18 +315,18 @@ namespace DataAccess.Tests
         public void GetUniqueProductsPurchased_ForNonExistingCustomer_ReturnsZero()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 900),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var productsPurchased = repository.GetUniqueProductsPurchased(2);
@@ -341,19 +339,19 @@ namespace DataAccess.Tests
         public void HasEverPurchasedProduct_ForExistingCustomerAndProducts_ReturnsTrue()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1),
               new Order(3, 2, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 900),
               new Product(2, "Notebook", 1000)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var productsPurchased = repository.HasEverPurchasedProduct(1, 1);
@@ -366,17 +364,17 @@ namespace DataAccess.Tests
         public void HasEverPurchasedProduct_ForExistingNonCustomerAndProducts_ReturnsFalse()
         {
             // arrange
-            var mock = new Mock<IDatabase>();
+            var mockDb = new Mock<IDatabase>();
 
-            mock.Setup(repo => repo.Orders).Returns(new List<Order>
+            mockDb.Setup(x => x.Orders).Returns(new List<Order>
             { new Order(1, 1, 1),
               new Order(2, 2, 1)});
-            mock.Setup(repo => repo.Products).Returns(new List<Product>
+            mockDb.Setup(x => x.Products).Returns(new List<Product>
             { new Product(1, "Phone", 900)});
-            mock.Setup(repo => repo.Customers).Returns(new List<Customer>
+            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
             { new Customer(1, "Mike")});
 
-            var repository = new Repository(mock.Object);
+            var repository = new Repository(mockDb.Object);
 
             // act
             var productsPurchased = repository.HasEverPurchasedProduct(2, 2);

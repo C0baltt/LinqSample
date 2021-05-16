@@ -7,6 +7,18 @@ namespace JobScheduler
     {
         public bool IsFailed { get; set; }
 
+        public DateTime StartJob { get; set; }
+
+        public JobExecutionOrdersInConsole() : this(DateTime.MinValue)
+        {
+
+        }
+
+        public JobExecutionOrdersInConsole(DateTime timeStart)
+        {
+            StartJob = timeStart;
+        }
+
         public void Execute(DateTime signalTime)
         {
             var repository = new Repository();
