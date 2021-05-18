@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace AnalyticsAdapter
 {
@@ -31,6 +29,6 @@ namespace AnalyticsAdapter
 
         List<(string productName, int numberOfPurchases)> GetProductsPurchased(int customerId);
 
-        int GetAllPurchasesEveryCustomer();
+        List<ProductsOverView> GetAllPurchasesEveryCustomer();
     }
 }

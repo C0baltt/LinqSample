@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AnalyticsAdapter
 {
     public class Repository : IRepository
     {
         private readonly IDatabase _db;
+
+        public Repository()
+        {
+            _db = new Database();
+        }
 
         public Repository(IDatabase db)
         {
@@ -54,8 +57,6 @@ namespace AnalyticsAdapter
                 p => p.Id,
                 (o, p) => p)
                 .ToArray();
-
-            throw new InvalidOperationException();
         }
 
         public CustomerOverview GetCustomerOverview(int customerId)
@@ -113,8 +114,6 @@ namespace AnalyticsAdapter
             return _db.Orders
                 .Where(x => x.ProductId == productId)
                 .Count();
-
-            throw new InvalidOperationException();
         }
 
         public bool HasEverPurchasedProduct(int customerId, int productId)
@@ -139,36 +138,33 @@ namespace AnalyticsAdapter
                 .Intersect(productIds)
                 .Count() == productIds.Count();
         }
-
-        public List<(string productName, int numberOfPurchases)> GetAllPurchasesEveryCustomer()
+        
+        public List<ProductsOverView> GetAllPurchasesEveryCustomer()
         {
-            _db.Customers.Select(i => i.Id > 0)
-                //GetProductsPurchased(customerId)
-                    //.ToList();
-            
-           
+            var result = new List<ProductsOverView>();
+
+            foreach (var id in _db.Customers.Select(x => x.Id))
+            {
+                result.AddRange(GetProductsPurchasedForOneCustomers(id));
+            }
+
+            return result;
         }
 
-        /* public List<(string productName, int numberOfPurchases)>
-            GetProductsPurchased(int customerId)
+        private List<ProductsOverView> GetProductsPurchasedForOneCustomers(int customerId)
         {
             return GetProductOrdersJoined(customerId)
                 .GroupBy(x => x.order.ProductId)
-                .Select(g => (g.First().product.Name, g.Count()))
+                .Select(g =>
+                new ProductsOverView(
+                    _db.Customers.Single(x => x.Id == customerId).Name,
+                    g.First().product.Name,
+                    g.First().product.Price,
+                    g.Count()
+                ))
                 .ToList();
         }
-        
-         public Product[] GetAllProductsPurchased(int customerId)
-        {
-            return GetOrders(customerId)
-                .Join(_db.Products,
-                o => o.ProductId,
-                p => p.Id,
-                (o, p) => p)
-                .ToArray();
-
-            throw new InvalidOperationException();
-        }*/
+    
         private IEnumerable<Order> GetOrdersInternal(int customerId)
         {
             return _db.Orders.Where(order => order.CustomerId == customerId);

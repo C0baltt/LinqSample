@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AnalyticsAdapter;
-;
-/*using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShopApp;*/
+
 namespace DataAccess.Tests
 {
     public class FakeDatabase : IDatabase
