@@ -4,9 +4,9 @@ namespace JobScheduler
 {
     public class WriteToConsole : IJob
     {
-        public bool IsFailed { get; set; }
+        public bool ShouldStart { get; set; }
 
-        public DateTime StartJob { get; set; }
+    public DateTime StartJob { get; set; }
 
         public WriteToConsole() : this(DateTime.MinValue)
         {

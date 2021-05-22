@@ -37,22 +37,22 @@ namespace JobScheduler
 
         private void OnTimedEvent(object sender, ElapsedEventArgs @event)
         {
-            foreach (var job in _jobs.Where(j => !j.IsFailed && j.StartJob <= DateTime.Now))
+            foreach (var job in _jobs.Where(j => j.ShouldStart && j.StartJob <= DateTime.Now))
             {
                 try
                 {
                     job.Execute(@event.SignalTime);
 
-                    if (job.StartJob != DateTime.MinValue)
+                    if (job.StartJob == DateTime.MinValue)
                     {
-                        job.IsFailed = true;
+                        job.ShouldStart = false;
                     }
                 }
                 catch
                 {
                     Console.WriteLine($"An error has occurred in class {job.GetType().Name}" +
                         $". DateTime: {DateTime.Now}");
-                    job.IsFailed = true;
+                    job.ShouldStart = false;
                 }
             }
         }
