@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace JobScheduler
 {
-    public class JobScheduler 
+    public class JobScheduler
     {
         private readonly Timer _timer;
         private readonly List<IJob> _jobs = new();
@@ -18,7 +18,7 @@ namespace JobScheduler
             _timer.Enabled = false;
         }
 
-        public void AddHandler(IJob job)
+        public void AddJob(IJob job)
         {
             _jobs.Add(job);
         }

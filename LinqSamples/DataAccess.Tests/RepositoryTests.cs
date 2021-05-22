@@ -51,11 +51,8 @@ namespace DataAccess.Tests
         {
             // arrange
             var mockDb = new Mock<IDatabase>();
-
-            mockDb.Setup(x => x.Products).Returns(new List<Product>());
-            mockDb.Setup(x => x.Customers).Returns(new List<Customer>());
-            mockDb.Setup(x => x.Orders).Returns(new List<Order>());
-
+            var ordersList = new List<Order>();
+            mockDb.Setup(repo => repo.Orders).Returns(ordersList);
             var repository = new Repository(mockDb.Object);
 
             // act
@@ -64,6 +61,11 @@ namespace DataAccess.Tests
             repository.AddOrder(1, 1);
 
             // assert
+            mockDb.VerifyGet(x => x.Orders);
+            ordersList.Should().HaveCount(3).And.BeEquivalentTo(
+                new Order(1, 1, 1),
+                new Order(2, 1, 1),
+                new Order(3, 1, 1));
             mockDb.Object.Orders.Count.Should().Be(3);
         }
 
@@ -73,14 +75,22 @@ namespace DataAccess.Tests
             // arrange
             var mockDb = new Mock<IDatabase>();
 
-            mockDb.Setup(x => x.Orders).Returns(new List<Order>
-            { new Order(1, 1, 1),
-              new Order(2, 2, 1)});
-            mockDb.Setup(x => x.Products).Returns(new List<Product>
-            { new Product(1, "Phone", 500),
-              new Product(2, "Notebook", 1000)});
-            mockDb.Setup(x => x.Customers).Returns(new List<Customer>
-            { new Customer(1, "Mike")});
+            var ordersList = new List<Order>
+            {
+                new Order(1, 1, 1),
+                new Order(2, 2, 1)
+            };
+            var productsList = new List<Product>
+            {
+                new Product(1, "Phone", 500),
+                new Product(2, "Notebook", 1000)
+            };
+            var customerList = new List<Customer>
+            { new Customer(1, "Mike")};
+
+            mockDb.Setup(x => x.Orders).Returns(ordersList);
+            mockDb.Setup(x => x.Products).Returns(productsList);
+            mockDb.Setup(x => x.Customers).Returns(customerList);
 
             var repository = new Repository(mockDb.Object);
 

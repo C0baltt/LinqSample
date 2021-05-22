@@ -145,12 +145,12 @@ namespace AnalyticsProgram
 
         private static void AddLogToConsoleByDate(DateTime startTime)
         {
-            s_scheduler.AddHandler(new WriteToConsole(startTime));
+            s_scheduler.AddJob(new WriteToConsole(startTime));
         }
 
         private static void AddLogToFileByDate(DateTime startTime)
         {
-            s_scheduler.AddHandler(new ExecutionTimeFileLoggerJob(startTime));
+            s_scheduler.AddJob(new ExecutionTimeFileLoggerJob(startTime));
         }
 
         private static void AddDownloadWebsiteByDate(DateTime startTime)
@@ -159,12 +159,12 @@ namespace AnalyticsProgram
 
             var path = Console.ReadLine();
 
-            s_scheduler.AddHandler(new WebSiteDownloadJob(path, startTime));
+            s_scheduler.AddJob(new WebSiteDownloadJob(path, startTime));
         }
 
         private static void AddPrintOrdersByDate(DateTime startTime)
         {
-            s_scheduler.AddHandler(new JobExecutionOrdersInConsole(startTime));
+            s_scheduler.AddJob(new JobExecutionOrdersInConsole(startTime));
         }
 
         private static void Start()
