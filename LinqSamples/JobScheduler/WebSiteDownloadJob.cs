@@ -8,7 +8,7 @@ namespace AnalyticsProgram
     {
         private readonly string _siteName;
 
-        public bool IsFailed { get; set; }
+        public bool ShouldStart { get; set; }
 
         public DateTime StartJob { get; set; }
 

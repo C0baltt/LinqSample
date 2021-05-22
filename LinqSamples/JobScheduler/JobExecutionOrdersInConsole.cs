@@ -5,7 +5,7 @@ namespace JobScheduler
 {
     public class JobExecutionOrdersInConsole : IJob
     {
-        public bool IsFailed { get; set; }
+        public bool ShouldStart { get; set; }
 
         public DateTime StartJob { get; set; }
 

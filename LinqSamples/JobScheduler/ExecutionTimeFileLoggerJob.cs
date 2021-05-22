@@ -8,7 +8,7 @@ namespace AnalyticsProgram
     {
         private const string Path = "ExecutionTimeLog.txt";
 
-        public bool IsFailed { get; set; }
+        public bool ShouldStart { get; set; }
 
         public DateTime StartJob { get; set; }
 
