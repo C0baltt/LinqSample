@@ -11,12 +11,6 @@ namespace AnalyticsProgram.Jobs
 
         public DateTime StartJob { get; set; }
 
-        public WebSiteDownloadJob(string siteName)
-            : this(siteName, DateTime.MinValue)
-        {
-
-        }
-
         public WebSiteDownloadJob(string siteName, DateTime timeStart)
         {
             _siteName = "https://" + siteName.Replace("https://", "");

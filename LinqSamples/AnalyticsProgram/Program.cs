@@ -1,5 +1,5 @@
 ﻿using System;
-using JobScheduler;
+using AnalyticsProgram.Jobs;
 
 namespace AnalyticsProgram
 {
@@ -10,7 +10,7 @@ namespace AnalyticsProgram
         public static void Main(string[] args)
         {
             s_scheduler = new(ReadInterval());
-
+            s_scheduler.RegisterJob(new WebsiteDownloadDelayedJob(DateTime.Now.Add(TimeSpan.FromSeconds(30))));
             bool alive = true;
 
             while (alive)
@@ -145,7 +145,7 @@ namespace AnalyticsProgram
 
         private static void AddLogToConsoleByDate(DateTime startTime)
         {
-            s_scheduler.RegisterJob(new LogExecutionTimeInConsoleJob(startTime));
+            s_scheduler.RegisterJob(new LogExecutionTimeInConsoleJob());
         }
 
         private static void AddLogToFileByDate(DateTime startTime)

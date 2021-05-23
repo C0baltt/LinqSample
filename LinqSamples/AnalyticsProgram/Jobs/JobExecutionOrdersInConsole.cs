@@ -8,11 +8,6 @@ namespace AnalyticsProgram.Jobs
     {
         public DateTime StartJob { get; set; }
 
-        public JobExecutionOrdersInConsole() : this(DateTime.MinValue)
-        {
-
-        }
-
         public JobExecutionOrdersInConsole(DateTime timeStart)
         {
             StartJob = timeStart;
