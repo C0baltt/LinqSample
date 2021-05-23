@@ -1,14 +1,26 @@
-using System;
-using System.Threading.Tasks;
+﻿using System;
 
-namespace AnalyticsProgram.Jobs
+namespace JobScheduler
 {
-    public class LogExecutionTimeInConsoleJob : BaseJob
+    public class WriteToConsole : IJob
     {
-        public override Task Execute(DateTime signalTime)
+        public bool ShouldStart { get; set; }
+
+    public DateTime StartJob { get; set; }
+
+        public WriteToConsole() : this(DateTime.MinValue)
+        {
+
+        }
+
+        public WriteToConsole(DateTime timeStart)
+        {
+            StartJob = timeStart;
+        }
+
+        public void Execute(DateTime signalTime)
         {
             Console.WriteLine($"Executed: {signalTime}");
-            return Task.CompletedTask;
         }
     }
 }

@@ -1,10 +1,10 @@
-using System;
-using System.IO;
+﻿using System;
 using System.Text;
+using System.IO;
 
-namespace AnalyticsProgram
+namespace JobScheduler
 {
-    public static class FileUtils
+   public static class FileUtils
     {
         public static void WriteToFile(string path, string text)
         {

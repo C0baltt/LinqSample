@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnalyticsProgram", "AnalyticsProgram\AnalyticsProgram.csproj", "{9589ACB9-592B-4AFE-A5F7-DC2B42524AE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Tests", "DataAccess.Tests\DataAccess.Tests.csproj", "{54E8D5D5-5D3D-4F48-9577-01B69AB3BA4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Tests", "DataAccess.Tests\DataAccess.Tests.csproj", "{54E8D5D5-5D3D-4F48-9577-01B69AB3BA4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobScheduler", "JobScheduler\JobScheduler.csproj", "{0D632965-3E7C-49AB-AB2F-09A2A4D1F7B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobScheduler", "JobScheduler\JobScheduler.csproj", "{0D632965-3E7C-49AB-AB2F-09A2A4D1F7B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

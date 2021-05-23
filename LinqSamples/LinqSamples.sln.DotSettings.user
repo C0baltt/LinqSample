@@ -1,10 +1,9 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/Highlighting/AnalysisEnabled/@EntryValue">VISIBLE_FILES</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ad290330_002D0e8d_002D4b5e_002Da1de_002D4c8ab3851029/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Start_Always_ExecutesJob" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::54E8D5D5-5D3D-4F48-9577-01B69AB3BA4E::net5.0::DataAccess.Tests.JobSchedulerTests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4904d8be_002D99a2_002D49a6_002Da254_002D8ccddc29453b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetOrders_ForExistingCustomer_ReturnsResult" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::54E8D5D5-5D3D-4F48-9577-01B69AB3BA4E::net5.0::DataAccess.Tests.RepositoryTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	
 	
 	</wpf:ResourceDictionary>

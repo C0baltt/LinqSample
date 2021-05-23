@@ -1,4 +1,4 @@
-namespace JobScheduler
+﻿namespace JobScheduler
 {
     public interface IDelayedJob : IJob
     {
