@@ -25,19 +25,19 @@ namespace AnalyticsProgram.Jobs
 
         static async Task JsonJob(string[] args)
         {
+            // чтение данных
+            using (FileStream fs = new FileStream("user.json", FileMode.OpenOrCreate))
+            {
+                Person restoredPerson = await JsonSerializer.DeserializeAsync<Person>(fs);
+                Console.WriteLine($"Name: {restoredPerson.Name}  Age: {restoredPerson.Age}");
+            }
+
             // сохранение данных
             using (FileStream fs = new FileStream("user.json", FileMode.OpenOrCreate))
             {
                 
                 await JsonSerializer.SerializeAsync<Person>(fs, tom);
                 Console.WriteLine("Data has been saved to file");
-            }
-
-            // чтение данных
-            using (FileStream fs = new FileStream("user.json", FileMode.OpenOrCreate))
-            {
-                Person restoredPerson = await JsonSerializer.DeserializeAsync<Person>(fs);
-                Console.WriteLine($"Name: {restoredPerson.Name}  Age: {restoredPerson.Age}");
             }
         }
 
