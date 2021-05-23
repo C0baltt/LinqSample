@@ -1,14 +1,13 @@
 ﻿using System;
-using JobScheduler;
-using System.Net;
+using System.Threading.Tasks;
+using AnalyticsProgram.Utils;
 
-namespace AnalyticsProgram
+namespace AnalyticsProgram.Jobs
 {
     public class WebSiteDownloadJob : BaseJob
     {
-        private readonly string _siteName;
-
-        public bool ShouldStart { get; set; }
+        private const string FilePath = "Stackoverflow.txt";
+        private string _siteName = "https://stackoverflow.com/questions/26233/fastest-c-sharp-code-to-download-a-web-page";
 
         public DateTime StartJob { get; set; }
 
@@ -24,14 +23,10 @@ namespace AnalyticsProgram
             StartJob = timeStart;
         }
 
-        public void Execute(DateTime signalTime)
+        public override Task Execute(DateTime signalTime)
         {
-            var client = new WebClient();
-            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-            var reply = client.DownloadString(_siteName);
-
-            var name = _siteName.Replace("https://", "") + ".txt";
-            FileUtils.WriteToFile(name, reply);
+            WebsiteUtils.Download(_siteName, FilePath);
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 
-namespace JobScheduler
+namespace AnalyticsProgram.Jobs
 {
-    public class WriteToConsole : IJob
+    public class WriteToConsole : BaseJob
     {
-        public bool ShouldStart { get; set; }
-
     public DateTime StartJob { get; set; }
 
         public WriteToConsole() : this(DateTime.MinValue)
@@ -18,9 +17,10 @@ namespace JobScheduler
             StartJob = timeStart;
         }
 
-        public void Execute(DateTime signalTime)
+        public override Task Execute(DateTime signalTime)
         {
             Console.WriteLine($"Executed: {signalTime}");
+            return Task.CompletedTask;
         }
     }
 }

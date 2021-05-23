@@ -1,14 +1,20 @@
 ﻿using System;
 using JobScheduler;
 using System.Globalization;
+using System.Threading.Tasks;
 
-namespace AnalyticsProgram
+namespace AnalyticsProgram.Jobs
+
 {
-   public class ExecutionTimeFileLoggerJob : IJob
+   public class ExecutionTimeFileLoggerJob : BaseJob
     {
         private const string Path = "ExecutionTimeLog.txt";
+        private bool _isFailed;
 
-        public bool ShouldStart { get; set; }
+        public override Task<bool> ShouldRun(DateTime signalTime)
+        {
+            return Task.FromResult(!_isFailed);
+        }
 
         public DateTime StartJob { get; set; }
 
@@ -22,10 +28,16 @@ namespace AnalyticsProgram
             StartJob = timeStart;
         }
 
-        public void Execute(DateTime signalTime)
+        public override Task Execute(DateTime signalTime)
         {
             FileUtils.WriteToFile(Path,
                 signalTime.ToString(CultureInfo.InvariantCulture));
+            return Task.CompletedTask;
+        }
+
+        public override void MarkAsFailed()
+        {
+            _isFailed = true;
         }
     }
 }

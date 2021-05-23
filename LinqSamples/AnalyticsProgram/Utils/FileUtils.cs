@@ -2,7 +2,7 @@
 using System.Text;
 using System.IO;
 
-namespace JobScheduler
+namespace AnalyticsProgram
 {
    public static class FileUtils
     {
