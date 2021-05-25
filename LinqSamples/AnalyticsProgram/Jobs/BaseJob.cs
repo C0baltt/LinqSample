@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JobScheduler;
 
@@ -8,7 +9,7 @@ namespace AnalyticsProgram.Jobs
     {
         private bool _isFailed;
 
-        public abstract Task Execute(DateTime signalTime);
+        public abstract Task Execute(DateTime signalTime, CancellationToken token);
 
         public virtual Task<bool> ShouldRun(DateTime signalTime)
         {

@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JobScheduler;
 
@@ -14,7 +15,7 @@ namespace AnalyticsProgram.Jobs
             _startAt = signalTime;
         }
 
-        public override Task Execute(DateTime signalTime)
+        public override Task Execute(DateTime signalTime, CancellationToken token)
         {
             _hasRun = true;
             return Task.CompletedTask;
