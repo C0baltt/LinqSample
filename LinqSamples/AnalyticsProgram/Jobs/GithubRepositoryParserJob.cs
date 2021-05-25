@@ -2,11 +2,13 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.IO;
 using System.Text.Json;
 using JobScheduler;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading;
+using System.Threading.Tasks;
+
 
 namespace AnalyticsProgram.Jobs
 {
@@ -35,7 +37,6 @@ namespace AnalyticsProgram.Jobs
 
             var repos = JsonSerializer.Deserialize<Repository[]>(result);
 
-            // heavy results handling
             _consoleWrapper.WriteLine(result);
         }
 

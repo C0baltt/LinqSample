@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace AnalyticsProgram.Jobs
             StartJob = timeStart;
         }
 
-        public override Task Execute(DateTime signalTime)
+        public override Task Execute(DateTime signalTime, CancellationToken token)
         {
             FileUtils.WriteToFile(Path,
                 signalTime.ToString(CultureInfo.InvariantCulture));

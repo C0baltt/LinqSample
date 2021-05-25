@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Timers;
 using System;
+using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
+using Timer = System.Timers.Timer;
 
 namespace JobScheduler
 {
@@ -10,6 +12,7 @@ namespace JobScheduler
     {
         private readonly Timer _timer;
         private readonly List<IJob> _jobs = new();
+        private CancellationTokenSource _tokenSource;
         private readonly List<IDelayedJob> _delayedJobs = new();
 
         public JobScheduler(int intervalMs)
@@ -80,7 +83,7 @@ namespace JobScheduler
         {
             try
             {
-                await job.Execute(signalTime);
+                await job.Execute(signalTime, _tokenSource.Token);
             }
             catch (Exception e)
             {

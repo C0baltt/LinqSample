@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using AnalyticsAdapter;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace AnalyticsProgram.Jobs
             StartJob = timeStart;
         }
 
-        public override Task Execute(DateTime signalTime)
+        public override Task Execute(DateTime signalTime, CancellationToken token)
         {
             var repository = new Repository();
             var products = repository.GetAllPurchasesEveryCustomer();
