@@ -2,6 +2,7 @@
 using System.Timers;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobScheduler
 {
@@ -9,6 +10,7 @@ namespace JobScheduler
     {
         private readonly Timer _timer;
         private readonly List<IJob> _jobs = new();
+        private readonly List<IDelayedJob> _delayedJobs = new();
 
         public JobScheduler(int intervalMs)
         {
@@ -18,9 +20,14 @@ namespace JobScheduler
             _timer.Enabled = false;
         }
 
-        public void AddJob(IJob job)
+        public void RegisterJob(IJob job)
         {
             _jobs.Add(job);
+        }
+
+        public void RegisterJob(IDelayedJob job)
+        {
+            _delayedJobs.Add(job);
         }
 
         public void Start()
@@ -37,23 +44,48 @@ namespace JobScheduler
 
         private void OnTimedEvent(object sender, ElapsedEventArgs @event)
         {
-            foreach (var job in _jobs.Where(j => j.ShouldStart && j.StartJob <= DateTime.Now))
-            {
-                try
-                {
-                    job.Execute(@event.SignalTime);
+            OnTimedEventAsync(@event);
+        }
 
-                    if (job.StartJob == DateTime.MinValue)
-                    {
-                        job.ShouldStart = false;
-                    }
-                }
-                catch
+        private async Task OnTimedEventAsync(ElapsedEventArgs @event)
+        {
+            var task1 = ExecuteSimpleJobs(@event);
+            var task2 = ExecuteDelayedJobs(@event);
+
+            await Task.WhenAll(task1, task2);
+        }
+
+        private async Task ExecuteSimpleJobs(ElapsedEventArgs @event)
+        {
+            await ExecuteJobs(_jobs, @event.SignalTime);
+        }
+
+        private async Task ExecuteDelayedJobs(ElapsedEventArgs @event)
+        {
+            await ExecuteJobs(_delayedJobs.Select(x => x as IJob), @event.SignalTime);
+        }
+
+        private async Task ExecuteJobs(IEnumerable<IJob> jobs, DateTime startAt)
+        {
+            foreach (var job in jobs)
+            {
+                if (await job.ShouldRun(startAt))
                 {
-                    Console.WriteLine($"An error has occurred in class {job.GetType().Name}" +
-                        $". DateTime: {DateTime.Now}");
-                    job.ShouldStart = false;
+                    await ExecuteJob(job, startAt);
                 }
+            }
+        }
+
+        private async Task ExecuteJob(IJob job, DateTime signalTime)
+        {
+            try
+            {
+                await job.Execute(signalTime);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                job.MarkAsFailed();
             }
         }
     }

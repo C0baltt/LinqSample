@@ -1,25 +1,19 @@
 ﻿using System;
 using AnalyticsAdapter;
+using System.Threading.Tasks;
 
-namespace JobScheduler
+namespace AnalyticsProgram.Jobs
 {
-    public class JobExecutionOrdersInConsole : IJob
+    public class JobExecutionOrdersInConsole : BaseJob
     {
-        public bool ShouldStart { get; set; }
-
         public DateTime StartJob { get; set; }
-
-        public JobExecutionOrdersInConsole() : this(DateTime.MinValue)
-        {
-
-        }
 
         public JobExecutionOrdersInConsole(DateTime timeStart)
         {
             StartJob = timeStart;
         }
 
-        public void Execute(DateTime signalTime)
+        public override Task Execute(DateTime signalTime)
         {
             var repository = new Repository();
             var products = repository.GetAllPurchasesEveryCustomer();
@@ -29,6 +23,7 @@ namespace JobScheduler
                 Console.Write($"Executed:{DateTime.Now}.\t");
                 Console.WriteLine($"{item}");
             }
+            return Task.CompletedTask;
         }
     }
 }
