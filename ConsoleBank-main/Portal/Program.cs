@@ -17,8 +17,11 @@ namespace Portal
                 Console.WriteLine(currency);
             }
 
-            var rate = await api.GetCurrencyRate("MDL");
+            var rate = await api.GetCurrencyRate("IDR");
             Console.WriteLine(rate);
+
+            var rateOnDate = await api.GetCurrencyRateOnDate("IDR");
+            Console.WriteLine(rateOnDate);
         }
     }
 }

@@ -44,7 +44,13 @@ namespace Currencies
                 .GetJsonAsync<CurrencyRate>());
         }
 
-        //CurrencyRatesApiUrl
+        public Task<CurrencyRate> GetCurrencyRateOnDate(string abbreviation)
+        {
+            return CallApi(() => CurrencyRatesApiUrl
+                .AppendPathSegment(abbreviation)
+                .SetQueryParams("ondate", 2020/7/5)
+                .GetJsonAsync<CurrencyRate>());
+        }
 
         private static async Task<T> CallApi<T>(Func<Task<T>> func)
         {
