@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AnalyticsProgram.Utils;
 
@@ -12,9 +13,9 @@ namespace AnalyticsProgram.Jobs
         {
         }
 
-        public override async Task Execute(DateTime signalTime)
+        public override async Task Execute(DateTime signalTime, CancellationToken token)
         {
-            await base.Execute(signalTime);
+            await base.Execute(signalTime, token);
             WebsiteUtils.Download(_siteName, "onliner.by");
         }
     }

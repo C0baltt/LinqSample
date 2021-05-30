@@ -2,46 +2,51 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.IO;
+using System.Text.Json;
+using JobScheduler;
+using System.Text.Json.Serialization;
+using System.Threading;
+using System.Linq;
+
 namespace AnalyticsProgram.Jobs
 {
     public class GithubRepositoryParserJob : BaseJob
     {
+        private readonly IConsoleWrapper _consoleWrapper;
         private static readonly HttpClient Client = new();
 
         public GithubRepositoryParserJob()
         {
+            _consoleWrapper = new ConsoleWrapper();
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
             Client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
         }
 
-       
-        public override async Task Execute(DateTime signalTime)
+        public override async Task Execute(DateTime signalTime, CancellationToken token)
         {
-            var result = await ProcessRepositories();
-            Console.WriteLine(result);
-        }
+            var result = await ProcessRepositories(token);
 
-        static async Task JsonJob(string[] args)
-        {
-            // чтение данных
-            using (FileStream fs = new FileStream("user.json", FileMode.OpenOrCreate))
+            if (token.IsCancellationRequested)
             {
-                Person restoredPerson = await JsonSerializer.DeserializeAsync<Person>(fs);
-                Console.WriteLine($"Name: {restoredPerson.Name}  Age: {restoredPerson.Age}");
+                _consoleWrapper.WriteLine("GithubRepositoryParserJob: Operation canceled.");
+                return;
             }
 
-            // сохранение данных
-            using (FileStream fs = new FileStream("user.json", FileMode.OpenOrCreate))
+            var repos = JsonSerializer.Deserialize<Repository[]>(result);
+
+            _consoleWrapper.WriteLine(result);
+
+            foreach (var repo in repos.Where(x => x.CreatedAt.Year > 2013))
             {
-                
-                await JsonSerializer.SerializeAsync<Person>(fs, tom);
-                Console.WriteLine("Data has been saved to file");
+                _consoleWrapper.WriteLine(repo.Name);
+            }
+
+            foreach (var repo in repos.Where(x => x.License?.Key.Contains("apache") == true))
+            {
+                _consoleWrapper.WriteLine(repo.Name);
             }
         }
-
-
 
         public override async Task<bool> ShouldRun(DateTime signalTime)
         {
@@ -49,10 +54,43 @@ namespace AnalyticsProgram.Jobs
             return await base.ShouldRun(signalTime) && isConnected.Length > 0;
         }
 
-        private static async Task<string> ProcessRepositories()
+        private static async Task<string> ProcessRepositories(CancellationToken token)
         {
-                var stringTask = Client.GetStringAsync("https://api.github.com/orgs/dotnet/repos");
+            var stringTask = Client.GetStringAsync("https://api.github.com/orgs/dotnet/repos", token);
             return await stringTask;
+        }
+
+        public class Repository
+        {
+            [JsonPropertyName("id")]
+            public int Id { get; set; }
+
+            [JsonPropertyName("node_id")]
+            public string NodeId { get; set; }
+
+            [JsonPropertyName("name")]
+            public string Name { get; set; }
+
+            [JsonPropertyName("full_name")]
+            public string FullName { get; set; }
+
+            [JsonPropertyName("private")]
+            public bool IsPrivate { get; set; }
+
+            [JsonPropertyName("created_at")]
+            public DateTime CreatedAt { get; set; }
+
+            [JsonPropertyName("license")]
+            public License License { get; set; }
+        }
+
+        public class License
+        {
+            [JsonPropertyName("key")]
+            public string Key { get; set; }
+
+            [JsonPropertyName("name")]
+            public string Name { get; set; }
         }
     }
 }

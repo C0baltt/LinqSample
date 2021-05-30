@@ -1,4 +1,4 @@
-using AnalyticsAdapter;
+﻿using AnalyticsAdapter;
 
 namespace AnalyticsProgram
 {
