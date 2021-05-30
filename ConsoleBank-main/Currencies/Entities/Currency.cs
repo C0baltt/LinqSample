@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Currencies.Entities
 {
@@ -18,7 +18,7 @@ namespace Currencies.Entities
 
         public override string ToString()
         {
-            return $"{Id} - {Code} - {Abbreviation} - {Name}";
+            return $"{Id} \t- \t{Code} \t- \t{Abbreviation} \t- \t{Name}";
         }
     }
 }

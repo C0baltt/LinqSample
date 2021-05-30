@@ -5,9 +5,9 @@ using Currencies.Entities;
 
 namespace Portal
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var api = new CurrenciesApi();
             Currency[] currencies = await api.GetCurrencies();
@@ -17,7 +17,7 @@ namespace Portal
                 Console.WriteLine(currency);
             }
 
-            CurrencyRate rate = await api.GetCurrencyRate(20000);
+            var rate = await api.GetCurrencyRate("MXN");
             Console.WriteLine(rate);
         }
     }
