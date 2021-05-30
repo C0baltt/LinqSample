@@ -8,8 +8,6 @@ namespace Currencies
 {
     public class CurrenciesApi : ICurrenciesApi
     {
-    //https://www.nbrb.by/api/exrates/rates/USD?parammode=2 – по буквенному коду валюты (ИСО 4217)
-
     // Полный перечень иностранных валют, по отношению к которым
     // Национальным банком устанавливается официальный курс белорусского рубля:
     //Адрес запроса: https://www.nbrb.by/api/exrates/currencies
@@ -20,8 +18,11 @@ namespace Currencies
         //        Национальным банком на конкретную дату:
         //Адрес запроса:                            https://www.nbrb.by/api/exrates/rates
         private const string CurrencyRatesApiUrl = "https://www.nbrb.by/api/exrates/rates";
-        private const string Parammode2 = "?parammode=2";
 
+        //получение официального курса белорусского рубля по отношению к иностранным валютам,
+        //устанавливаемого ежедневно, на 6 июля 2016 года: 
+        //https://www.nbrb.by/api/exrates/rates?ondate=2016-7-6&periodicity=0
+        
         public Task<Currency[]> GetCurrencies()
         {
             return CallApi(() => CurrenciesApiUrl.GetJsonAsync<Currency[]>());
@@ -34,8 +35,7 @@ namespace Currencies
         
         public Task<CurrencyRate> GetCurrencyRate(string abbreviation)
         {
-            //return CallApi(() => CurrencyRatesApiUrl.AppendPathSegment(abbreviation+Parammode2).GetJsonAsync<CurrencyRate>());
-            return CallApi(() => CurrencyRatesApiUrl
+           return CallApi(() => CurrencyRatesApiUrl
                 .AppendPathSegment(abbreviation)
                 .SetQueryParams(new
                 {
@@ -43,7 +43,9 @@ namespace Currencies
                 })
                 .GetJsonAsync<CurrencyRate>());
         }
-        
+
+        //CurrencyRatesApiUrl
+
         private static async Task<T> CallApi<T>(Func<Task<T>> func)
         {
             try

@@ -17,7 +17,7 @@ namespace Portal
                 Console.WriteLine(currency);
             }
 
-            var rate = await api.GetCurrencyRate("MXN");
+            var rate = await api.GetCurrencyRate("MDL");
             Console.WriteLine(rate);
         }
     }
