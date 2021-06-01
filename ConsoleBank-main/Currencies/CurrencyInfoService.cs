@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Currencies.Entities;
@@ -76,7 +76,7 @@ namespace Currencies
         }
 
         // TODO: support denomination (add DateTime onDate)
-        private async Task<int> GetCurrencyId(string abbreviation)
+        private async Task<int> GetCurrencyId(string abbreviation, DateTime? onDate = null)
         {
             Currency[] currencies = await _api.GetCurrencies();
             return currencies.Single(x => x.Abbreviation == abbreviation).Id;
