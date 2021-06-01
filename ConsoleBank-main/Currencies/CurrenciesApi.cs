@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Currencies.Entities;
 using Flurl;
@@ -8,48 +9,47 @@ namespace Currencies
 {
     public class CurrenciesApi : ICurrenciesApi
     {
-    // Полный перечень иностранных валют, по отношению к которым
-    // Национальным банком устанавливается официальный курс белорусского рубля:
-    //Адрес запроса: https://www.nbrb.by/api/exrates/currencies
-    private const string CurrenciesApiUrl = "https://www.nbrb.by/api/exrates/currencies";
-        //                                      "https://www.nbrb.by/api/exrates/currencies"
+        private const string BaseApiUrl = "https://www.nbrb.by/api/exrates";
+        private readonly string _currencyRatesDynamicsApiUrl = $"{BaseApiUrl}/rates/dynamics";
+        private readonly string _currencyRatesApiUrl = $"{BaseApiUrl}/rates";
+        private readonly string _currenciesApiUrl = $"{BaseApiUrl}/currencies";
 
-        //        Официальный курс белорусского рубля по отношению к иностранным валютам, устанавливаемый
-        //        Национальным банком на конкретную дату:
-        //Адрес запроса:                            https://www.nbrb.by/api/exrates/rates
-        private const string CurrencyRatesApiUrl = "https://www.nbrb.by/api/exrates/rates";
-
-        //получение официального курса белорусского рубля по отношению к иностранным валютам,
-        //устанавливаемого ежедневно, на 6 июля 2016 года: 
-        //https://www.nbrb.by/api/exrates/rates?ondate=2016-7-6&periodicity=0
-        
-        public Task<Currency[]> GetCurrencies()
+        public async Task<Currency[]> GetCurrencies(bool afterDenomination)
         {
-            return CallApi(() => CurrenciesApiUrl.GetJsonAsync<Currency[]>());
+            var currencies = await CallApi(() => _currenciesApiUrl.GetJsonAsync<Currency[]>());
+            return afterDenomination
+                ? currencies.Where(currency => currency.DateEnd > DateTime.Now).ToArray()
+                : currencies;
         }
 
         public Task<CurrencyRate> GetCurrencyRate(int currencyId)
         {
-            return CallApi(() => CurrencyRatesApiUrl.AppendPathSegment(currencyId).GetJsonAsync<CurrencyRate>());
+            return CallApi(() => _currencyRatesApiUrl.AppendPathSegment(currencyId).GetJsonAsync<CurrencyRate>());
         }
-        
-        public Task<CurrencyRate> GetCurrencyRate(string abbreviation)
+
+        public Task<CurrencyRate> GetCurrencyRate(string currencyAbbreviation, DateTime? onDate)
         {
-           return CallApi(() => CurrencyRatesApiUrl
-                .AppendPathSegment(abbreviation)
+            var result = _currencyRatesApiUrl
+                .AppendPathSegment(currencyAbbreviation)
                 .SetQueryParams(new
                 {
                     parammode = 2,
-                })
-                .GetJsonAsync<CurrencyRate>());
+                    ondate = onDate?.ToString()
+                });
+
+            return CallApi(() => result.GetJsonAsync<CurrencyRate>());
         }
 
-        public Task<CurrencyRate> GetCurrencyRateOnDate(string abbreviation)
+        public Task<CurrencyRateShort[]> GetDynamics(int currencyId, DateTime start, DateTime end)
         {
-            return CallApi(() => CurrencyRatesApiUrl
-                .AppendPathSegment(abbreviation)
-                .SetQueryParams("ondate", 2020/7/5)
-                .GetJsonAsync<CurrencyRate>());
+            return CallApi(() => _currencyRatesDynamicsApiUrl
+                .AppendPathSegment(currencyId)
+                .SetQueryParams(new
+                {
+                    startdate = start.ToString(),
+                    enddate = end.ToString(),
+                })
+                .GetJsonAsync<CurrencyRateShort[]>());
         }
 
         private static async Task<T> CallApi<T>(Func<Task<T>> func)

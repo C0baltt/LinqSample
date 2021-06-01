@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Currencies.Entities
 {
@@ -10,12 +10,15 @@ namespace Currencies.Entities
         [JsonProperty("Cur_Scale")]
         public int Scale { get; set; }
 
+        [JsonProperty("Cur_Abbreviation")]
+        public string Abbreviation { get; set; }
+
         [JsonProperty("Cur_OfficialRate")]
         public double Rate { get; set; }
 
         public override string ToString()
         {
-            return $"{Id} \t- \t{Scale} \t- \t{Rate}";
+            return $"{Id} - {Scale} - {Rate}";
         }
     }
 }
