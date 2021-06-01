@@ -31,9 +31,9 @@ namespace Portal
             var result2 = await _infoService.ConvertTo(1000, "RUB");
             Console.WriteLine("2: " + result2);
 
-            var avg = await _infoService.GetAvgRate("USD", new DateTime(2020, 1, 1), new DateTime(2020, 12, 31));
-            var min = await _infoService.GetMinRate("USD", new DateTime(2020, 1, 1), new DateTime(2020, 12, 31));
-            var max = await _infoService.GetManRate("USD", new DateTime(2020, 1, 1), new DateTime(2020, 12, 31));
+            var avg = await _infoService.GetAvgRate("USD", new DateTime(2021, 1, 1), new DateTime(2021, 05, 31));
+            var min = await _infoService.GetMinRate("USD", new DateTime(2021, 1, 1), new DateTime(2021, 05, 31));
+            var max = await _infoService.GetManRate("USD", new DateTime(2021, 1, 1), new DateTime(2021, 05, 31));
 
             Console.WriteLine("avg: " + avg);
             Console.WriteLine("min: " + min);

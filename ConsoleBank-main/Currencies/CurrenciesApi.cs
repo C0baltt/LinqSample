@@ -46,8 +46,8 @@ namespace Currencies
                 .AppendPathSegment(currencyId)
                 .SetQueryParams(new
                 {
-                    startdate = start.ToString(),
-                    enddate = end.ToString(),
+                    startdate = start.ToString("yyyy-MM-dd"),
+                    enddate = end.ToString("yyyy-MM-dd"),
                 })
                 .GetJsonAsync<CurrencyRateShort[]>());
         }
