@@ -10,8 +10,7 @@ namespace Portal
 {
     class Program
     {
-        private static ICurrenciesApiCacheService apiCache =
-            new CurrenciesApiCacheService(new BynCurrenciesApi());
+        private static ICurrenciesApiCacheService apiCache = new CurrenciesApiCacheService(new BynCurrenciesApi());
         private static ICurrencyInfoService _infoService =
             new CurrencyInfoService(apiCache, new CurrencyConversionService(apiCache));
 
@@ -70,9 +69,9 @@ namespace Portal
             Console.WriteLine($"USD rate: {usdRate}");
             Console.WriteLine($"EUR rate: {eurRate}");
 
-            //var result1 = await _infoService.ConvertFrom(100, "USD");
+            //var result1 = await _infoService.ConvertFromLocal(100, "USD");
             //Console.WriteLine("1: " + result1);
-            //var result2 = await _infoService.ConvertTo(1000, "RUB");
+            //var result2 = await _infoService.ConvertToLocal(1000, "RUB");
             //Console.WriteLine("2: " + result2);
 
             var avg = await _infoService.GetAvgRate("USD", new DateTime(2020, 1, 1), new DateTime(2020, 12, 31));

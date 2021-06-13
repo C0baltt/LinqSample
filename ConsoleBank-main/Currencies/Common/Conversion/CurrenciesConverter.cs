@@ -1,4 +1,4 @@
-namespace Currencies.Common.Conversion
+﻿namespace Currencies.Common.Conversion
 {
     // TODO write unit tests
     public static class CurrenciesConverter

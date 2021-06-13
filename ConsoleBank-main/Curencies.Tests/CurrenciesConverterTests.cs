@@ -1,11 +1,8 @@
 ﻿using System;
 using Xunit;
-using Currencies;
 using Currencies.Common.Conversion;
 using FluentAssertions;
 using Currencies.Common;
-using static System.Collections.IEnumerable
-    ;
 
 namespace Currencies.Tests
 {
@@ -15,19 +12,20 @@ namespace Currencies.Tests
         public void ConvertToLocal_ForExsistCurrency_ReturnResult()
         {
             //arrange
-            CurrencyRateModel rate = new();
-            rate.Rate = 100;
-            rate.Nominal = 100;
-            rate.Date = new DateTime(2020,12,12);
-            rate.CharCode = "RUR";
-            rate.Id = 198;
-
-
+            CurrencyRateModel rate = new()
+            {
+                Rate = 100,
+                Nominal = 100,
+                Date = new DateTime(2020, 12, 12),
+                CharCode = "RUR",
+                Id = "198"
+            };
+            
             //act
             var rateResult = CurrenciesConverter.ConvertToLocal(100, rate);
 
             //assert
-            
+           rateResult.Should().Be(100.0m);
         }
     }
 }
