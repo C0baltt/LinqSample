@@ -48,7 +48,7 @@ namespace Currencies.Apis.Byn
                 .SetQueryParams(new
                 {
                     parammode = 2,
-                    ondate = onDate?.ToString()
+                    ondate = onDate?.ToString("d")
                 });
 
             var rate = await CallApi(() => result.GetJsonAsync<BynCurrencyRate>());
@@ -72,8 +72,8 @@ namespace Currencies.Apis.Byn
                 .AppendPathSegment(currency.Id)
                 .SetQueryParams(new
                 {
-                    startdate = start.ToString(),
-                    enddate = end.ToString(),
+                    startdate = start.ToString("yyyy-MM-dd"),
+                    enddate = end.ToString("yyyy-MM-dd"),
                 })
                 .GetJsonAsync<BynCurrencyRateShort[]>());
 
