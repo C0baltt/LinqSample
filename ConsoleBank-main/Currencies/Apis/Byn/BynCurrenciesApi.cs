@@ -17,6 +17,8 @@ namespace Currencies.Apis.Byn
         private readonly string _currencyRatesApiUrl = $"{BaseApiUrl}/rates";
         private readonly string _currenciesApiUrl = $"{BaseApiUrl}/currencies";
 
+        private readonly string RequestDateFormatBYN = "yyyy-MM-dd";
+
         public async Task<CurrencyModel[]> GetCurrencies(DateTime? onDate = null)
         {
             BynCurrency[] currencies = await GetCurrenciesInternal();
@@ -48,7 +50,7 @@ namespace Currencies.Apis.Byn
                 .SetQueryParams(new
                 {
                     parammode = 2,
-                    ondate = onDate?.ToString()
+                    ondate = onDate?.ToString(RequestDateFormatBYN)
                 });
 
             var rate = await CallApi(() => result.GetJsonAsync<BynCurrencyRate>());
@@ -72,8 +74,8 @@ namespace Currencies.Apis.Byn
                 .AppendPathSegment(currency.Id)
                 .SetQueryParams(new
                 {
-                    startdate = start.ToString(),
-                    enddate = end.ToString(),
+                    startdate = start.ToString(RequestDateFormatBYN),
+                    enddate = end.ToString(RequestDateFormatBYN),
                 })
                 .GetJsonAsync<BynCurrencyRateShort[]>());
 
