@@ -8,6 +8,22 @@ namespace Currencies.Tests
 {
     public class CurrenciesConverterTests
     {
+
+        [Theory]
+        [InlineData(1, 2, 3)]
+        [InlineData(-4, -6, -10)]
+        [InlineData(-2, 2, 0)]
+        [InlineData(int.MinValue, -1, int.MaxValue)]
+        public void CanAddTheory(int value1, int value2, int expected)
+        {
+            //arrange
+            var calculator = new Calculator();
+            //act
+            var result = calculator.Add(value1, value2);
+            //assert
+            Assert.Equal(expected, result);
+        }
+
         [Fact]
         public void ConvertToLocal_ForExsistCurrency_ReturnResult()
         {
@@ -16,9 +32,6 @@ namespace Currencies.Tests
             {
                 Rate = 100,
                 Nominal = 20,
-                Date = new DateTime(2020, 12, 12),
-                CharCode = "RUR",
-                Id = "198"
             };
             
             //act
@@ -29,7 +42,7 @@ namespace Currencies.Tests
         }
         
         [Fact]
-        public void ConvertToLocal_ForFractionalValue_ReturnResult()
+        public void ConvertToLocal_FloatingRate_ReturnResult()
         {
             //arrange
             CurrencyRateModel rate = new()
@@ -48,8 +61,8 @@ namespace Currencies.Tests
            rateResult.Should().Be(2.0833333333333333333333333333M);
         }
         
-        [Fact]
-        public void ConvertToLocal_ForZero_ReturnResult()
+        [Fact] 
+        public void ConvertToLocal_ZeroRate_ReturnResult()
         {
             //arrange
             CurrencyRateModel rate = new()
@@ -109,7 +122,7 @@ namespace Currencies.Tests
         }
     
         [Fact]
-        public void ConvertFromLocal_ForFractionalValue_ReturnResult()
+        public void ConvertFromLocal_FloatingRate_ReturnResult()
         {
             //arrange
             CurrencyRateModel rate = new()
@@ -129,7 +142,7 @@ namespace Currencies.Tests
         }
     
         [Fact]
-        public void ConvertFromLocal_ForZero_ReturnResult()
+        public void ConvertFromLocal_ZeroRate_ReturnResult()
         {
             //arrange
             CurrencyRateModel rate = new()

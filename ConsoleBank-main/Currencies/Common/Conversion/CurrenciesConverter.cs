@@ -1,6 +1,5 @@
 ﻿namespace Currencies.Common.Conversion
 {
-    // TODO write unit tests: DONE
     public static class CurrenciesConverter
     {
         public static decimal ConvertToLocal(decimal amount, CurrencyRateModel rate)
