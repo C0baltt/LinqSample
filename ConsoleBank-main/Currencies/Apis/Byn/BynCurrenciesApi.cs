@@ -9,6 +9,7 @@ using Flurl.Http;
 
 namespace Currencies.Apis.Byn
 {
+    // TODO cover by tests https://flurl.dev/docs/testable-http/
     public class BynCurrenciesApi : ICurrenciesApi
     {
         // TODO BYN
@@ -16,8 +17,6 @@ namespace Currencies.Apis.Byn
         private readonly string _currencyRatesDynamicsApiUrl = $"{BaseApiUrl}/rates/dynamics";
         private readonly string _currencyRatesApiUrl = $"{BaseApiUrl}/rates";
         private readonly string _currenciesApiUrl = $"{BaseApiUrl}/currencies";
-
-        private readonly string RequestDateFormatBYN = "yyyy-MM-dd";
 
         public async Task<CurrencyModel[]> GetCurrencies(DateTime? onDate = null)
         {
@@ -50,7 +49,7 @@ namespace Currencies.Apis.Byn
                 .SetQueryParams(new
                 {
                     parammode = 2,
-                    ondate = onDate?.ToString(RequestDateFormatBYN)
+                    ondate = onDate?.ToString()
                 });
 
             var rate = await CallApi(() => result.GetJsonAsync<BynCurrencyRate>());
@@ -74,8 +73,8 @@ namespace Currencies.Apis.Byn
                 .AppendPathSegment(currency.Id)
                 .SetQueryParams(new
                 {
-                    startdate = start.ToString(RequestDateFormatBYN),
-                    enddate = end.ToString(RequestDateFormatBYN),
+                    startdate = start.ToString(),
+                    enddate = end.ToString(),
                 })
                 .GetJsonAsync<BynCurrencyRateShort[]>());
 

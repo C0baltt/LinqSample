@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Accounting;
+using Accounting.Tracking;
 using Currencies.Apis.Byn;
 using Currencies.Common.Caching;
 using Currencies.Common.Conversion;
@@ -10,7 +13,8 @@ namespace Portal
 {
     class Program
     {
-        private static ICurrenciesApiCacheService apiCache = new CurrenciesApiCacheService(new BynCurrenciesApi());
+        private static ICurrenciesApiCacheService apiCache =
+            new CurrenciesApiCacheService(new BynCurrenciesApi());
         private static ICurrencyInfoService _infoService =
             new CurrencyInfoService(apiCache, new CurrencyConversionService(apiCache));
 
@@ -21,7 +25,13 @@ namespace Portal
             new AccountTransferService(repository, acquiringService,conversionService);
 
         private static AccountManagementService _accountManagementService =
-            new AccountManagementService(repository, acquiringService, transferService);
+            new(repository, acquiringService, transferService);
+
+        private static AccountOperationsTrackingService _trackingService = new(
+            acquiringService,
+            transferService,
+            () => DateTime.Now.AddHours(3)
+        );
 
         static async Task Main(string[] args)
         {
@@ -48,15 +58,18 @@ namespace Portal
             var eur = await _accountManagementService.GetAccount(accountEur);
             var rur = await _accountManagementService.GetAccount(accountRur);
 
+            foreach (var operation in _trackingService.GetOperations().GetTranferredInfos())
+            {
+                Console.WriteLine($"Operation: {operation.AccountId} - {operation.Type} - {operation.Amount}");
+            }
 
-            await RunInfo();
+            // await RunInfo();
             Console.WriteLine(Guid.NewGuid());
             Console.ReadLine();
         }
 
         private static async Task RunInfo()
         {
-
             var currencies = await _infoService.GetAvailableCurrencies();
 
             foreach (var currency in currencies)
@@ -69,10 +82,10 @@ namespace Portal
             Console.WriteLine($"USD rate: {usdRate}");
             Console.WriteLine($"EUR rate: {eurRate}");
 
-            //var result1 = await _infoService.ConvertFromLocal(100, "USD");
-            //Console.WriteLine("1: " + result1);
-            //var result2 = await _infoService.ConvertToLocal(1000, "RUB");
-            //Console.WriteLine("2: " + result2);
+            // var result1 = await _infoService.ConvertFrom(100, "USD");
+            // Console.WriteLine("1: " + result1);
+            // var result2 = await _infoService.ConvertTo(1000, "RUB");
+            // Console.WriteLine("2: " + result2);
 
             var avg = await _infoService.GetAvgRate("USD", new DateTime(2020, 1, 1), new DateTime(2020, 12, 31));
             var min = await _infoService.GetMinRate("USD", new DateTime(2020, 1, 1), new DateTime(2020, 12, 31));

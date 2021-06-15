@@ -1,15 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal", "Portal\Portal.csproj", "{88CEA489-68A7-4739-8FCE-67AA9009C47C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal", "Portal\Portal.csproj", "{88CEA489-68A7-4739-8FCE-67AA9009C47C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Currencies", "Currencies\Currencies.csproj", "{341D4388-49B4-48C7-A748-954E734B4501}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Currencies", "Currencies\Currencies.csproj", "{341D4388-49B4-48C7-A748-954E734B4501}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accounting", "Accounting\Accounting.csproj", "{FA09E5CB-9C2B-46F1-AAF9-F6CB8467D199}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting", "Accounting\Accounting.csproj", "{FA09E5CB-9C2B-46F1-AAF9-F6CB8467D199}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Currencies.Tests", "Curencies.Tests\Currencies.Tests.csproj", "{43BC878F-E09F-44C2-B8B5-8B97C3929942}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Currencies.Tests", "Currencies.Tests\Currencies.Tests.csproj", "{CE87F912-FF57-4C33-8DFC-5EC4175C3DF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,15 +26,9 @@ Global
 		{FA09E5CB-9C2B-46F1-AAF9-F6CB8467D199}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA09E5CB-9C2B-46F1-AAF9-F6CB8467D199}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA09E5CB-9C2B-46F1-AAF9-F6CB8467D199}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43BC878F-E09F-44C2-B8B5-8B97C3929942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43BC878F-E09F-44C2-B8B5-8B97C3929942}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43BC878F-E09F-44C2-B8B5-8B97C3929942}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43BC878F-E09F-44C2-B8B5-8B97C3929942}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9D431AF9-9990-4C5C-8757-3DB1680D694C}
+		{CE87F912-FF57-4C33-8DFC-5EC4175C3DF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE87F912-FF57-4C33-8DFC-5EC4175C3DF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE87F912-FF57-4C33-8DFC-5EC4175C3DF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE87F912-FF57-4C33-8DFC-5EC4175C3DF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

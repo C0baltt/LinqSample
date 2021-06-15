@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Currencies.Apis.Rub.Entities;
@@ -12,7 +12,7 @@ namespace Currencies.Apis.Rub
     public class RubCurrenciesApi : ICurrenciesApi
     {
         // TODO RUB
-        private const string RequestDateFormatRUB = "dd/MM/yyyy";
+        private const string RequestDateFormat = "dd/MM/yyyy";
         private const string BaseApiUrl = "http://www.cbr.ru/scripts";
         private readonly string _currencyRatesDynamicsApiUrl = $"{BaseApiUrl}/XML_dynamic.asp";
         private readonly string _currencyRatesApiUrl = $"{BaseApiUrl}/XML_daily.asp";
@@ -90,7 +90,7 @@ namespace Currencies.Apis.Rub
 
         private string GetFormattedDate(DateTime date)
         {
-            return date.ToString(RequestDateFormatRUB);
+            return date.ToString(RequestDateFormat);
         }
     }
 }
