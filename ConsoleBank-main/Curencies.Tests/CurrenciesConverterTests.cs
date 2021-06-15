@@ -8,57 +8,25 @@ namespace Currencies.Tests
 {
     public class CurrenciesConverterTests
     {
-
         [Theory]
-        [InlineData(1, 2, 3)]
-        [InlineData(-4, -6, -10)]
-        [InlineData(-2, 2, 0)]
-        [InlineData(int.MinValue, -1, int.MaxValue)]
-        public void CanAddTheory(int value1, int value2, int expected)
+        [InlineData(100, 100, 20, 500)]
+        [InlineData(2.5, 2.5, 3, 2.0833333333333333333333333333)]
+        [InlineData( 100, 100, 20, 500)]
+        [InlineData( 100, 100, 20, 500)]
+        public void ConvertToLocal_ForExsistCurrency_ReturnResult(decimal amount, int rate, int nominal, decimal expected)
         {
             //arrange
-            var calculator = new Calculator();
-            //act
-            var result = calculator.Add(value1, value2);
-            //assert
-            Assert.Equal(expected, result);
-        }
-
-        [Fact]
-        public void ConvertToLocal_ForExsistCurrency_ReturnResult()
-        {
-            //arrange
-            CurrencyRateModel rate = new()
+            CurrencyRateModel currencyRate = new()
             {
-                Rate = 100,
-                Nominal = 20,
+                Rate = rate,
+                Nominal = nominal,
             };
             
             //act
-            var rateResult = CurrenciesConverter.ConvertToLocal(100, rate);
+            var rateResult = CurrenciesConverter.ConvertToLocal(amount, currencyRate);
 
             //assert
-           rateResult.Should().Be(500.0m);
-        }
-        
-        [Fact]
-        public void ConvertToLocal_FloatingRate_ReturnResult()
-        {
-            //arrange
-            CurrencyRateModel rate = new()
-            {
-                Rate = 2.5,
-                Nominal = 3,
-                Date = new DateTime(2020, 12, 12),
-                CharCode = "RUR",
-                Id = "198"
-            };
-            
-            //act
-            var rateResult = CurrenciesConverter.ConvertToLocal(2.5M, rate);
-
-            //assert
-           rateResult.Should().Be(2.0833333333333333333333333333M);
+           rateResult.Should().Be(expected);
         }
         
         [Fact] 
