@@ -55,15 +55,33 @@ namespace Currencies.Tests
             string charCode = "USD";
             DateTime start = new DateTime(2021, 01, 01);
             DateTime end = new DateTime(2021, 01, 03);
-        //https://www.nbrb.by/API/ExRates/Rates/Dynamics/145?startDate=2021-1-1&endDate=2021-1-3
+            //https://www.nbrb.by/API/ExRates/Rates/Dynamics/145?startDate=2021-1-1&endDate=2021-1-3
+
             httpTest
-                .ForCallsTo("https://www.nbrb.by/API/ExRates/Rates/Dynamics")
+                .ForCallsTo("https://www.nbrb.by/api/exrates/currencies")
                 .WithVerb(HttpMethod.Get)
+            .RespondWith(
+                    "[{ \"Cur_ID\":143,\"Cur_ParentID\":143,\"Cur_Code\":\"826\",\"Cur_Abbreviation\":\"GBP\",\"Cur_Name\":" +
+                    "\"Фунт стерлингов\",\"Cur_Name_Bel\":\"Фунт стэрлінгаў\",\"Cur_Name_Eng\":\"Pound Sterling\",\"Cur_QuotName\":" +
+                    "\"1 Фунт стерлингов\",\"Cur_QuotName_Bel\":\"1 Фунт стэрлінгаў\",\"Cur_QuotName_Eng\":\"1 Pound Sterling\"," +
+                    "\"Cur_NameMulti\":\"Фунтов стерлингов\",\"Cur_Name_BelMulti\":\"Фунтаў стэрлінгаў\",\"Cur_Name_EngMulti\":" +
+                    "\"Pounds Sterling\",\"Cur_Scale\":1,\"Cur_Periodicity\":0,\"Cur_DateStart\":\"1991-01-01T00:00:00\",\"Cur_DateEnd\":" +
+                    "\"2050-01-01T00:00:00\"},{ \"Cur_ID\":145,\"Cur_ParentID\":145,\"Cur_Code\":\"840\",\"Cur_Abbreviation\":\"USD\"," +
+                    "\"Cur_Name\":\"Доллар США\",\"Cur_Name_Bel\":\"Долар ЗША\",\"Cur_Name_Eng\":\"US Dollar\",\"Cur_QuotName\":" +
+                    "\"1 Доллар США\",\"Cur_QuotName_Bel\":\"1 Долар ЗША\",\"Cur_QuotName_Eng\":\"1 US Dollar\",\"Cur_NameMulti\":" +
+                    "\"Долларов США\",\"Cur_Name_BelMulti\":\"Долараў ЗША\",\"Cur_Name_EngMulti\":\"US Dollars\",\"Cur_Scale\":1," +
+                    "\"Cur_Periodicity\":0,\"Cur_DateStart\":\"1991-01-01T00:00:00\",\"Cur_DateEnd\":\"2050-01-01T00:00:00\"}]");
+
+            httpTest
+                .ForCallsTo("https://www.nbrb.by/API/ExRates/Rates/Dynamics/145")
+                .WithVerb(HttpMethod.Get)
+                .WithQueryParam("startdate", start.ToString())
+                .WithQueryParam("enddate", end.ToString())
                 .RespondWith(
                     "[{ \"Cur_ID\":145,\"Date\":\"2021-01-01T00:00:00\",\"Cur_OfficialRate\":2.5789}," +
                     "{ \"Cur_ID\":145,\"Date\":\"2021-01-02T00:00:00\",\"Cur_OfficialRate\":2.5789}," +
                     "{ \"Cur_ID\":145,\"Date\":\"2021-01-03T00:00:00\",\"Cur_OfficialRate\":2.5789}]");
-
+            
             // act
             var api = new BynCurrenciesApi();
             var result = await api.GetDynamics(charCode, start, end);
@@ -82,7 +100,7 @@ namespace Currencies.Tests
                },
                 new CurrencyRateModel
                {
-                   Date = new DateTime(2021, 01, 02),
+                Date = new DateTime(2021, 01, 02),
                 Id = "USD",
                 Name = "USD",
                 Nominal = 1,
@@ -90,14 +108,14 @@ namespace Currencies.Tests
                 CharCode = "USD",
                },
                 new CurrencyRateModel
-               {
-                   Date = new DateTime(2021, 01, 03),
+                {
+                Date = new DateTime(2021, 01, 03),
                 Id = "USD",
                 Name = "USD",
                 Nominal = 1,
                 Rate = 2.4892,
                 CharCode = "USD",
-               },
+                },
             };
 
             result.Should().BeEquivalentTo(result1);
