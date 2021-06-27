@@ -76,6 +76,7 @@ namespace Currencies.Tests
             httpTest
                 .ForCallsTo("https://www.nbrb.by/api/exrates/currencies")
                 .WithVerb(HttpMethod.Get)
+                .WithQueryParam("date", ondate.ToString())
                 .RespondWith(
                     "[{ \"Cur_ID\":1,\"Cur_ParentID\":1,\"Cur_Code\":\"008\",\"Cur_Abbreviation\":\"ALL\",\"Cur_Name\":\"Албанский лек\"" +
                     ",\"Cur_Name_Bel\":\"Албанскі лек\",\"Cur_Name_Eng\":\"Albanian Lek\",\"Cur_QuotName\":\"1 Албанский лек\"," +
@@ -92,7 +93,7 @@ namespace Currencies.Tests
 
             // act
             var api = new BynCurrenciesApi();
-            var result = await api.GetCurrencies();
+            var result = await api.GetCurrencies(ondate);
 
             // assert
             var result1 = new CurrencyModel[3]
