@@ -62,11 +62,12 @@ namespace Currencies.Tests
                 CharCode = "ARS",
                 },
             };
+
             result.Should().BeEquivalentTo(result1);
         }
-        
+
         [Fact]
-        public async Task GetCurrenciesWithDate_Always_ReturnsCurrenciesByDate()
+        public async Task GetCurrenciesByDate_Always_ReturnsCurrenciesByDate()
         {
             // arrange
             using var httpTest = new HttpTest();
@@ -74,49 +75,28 @@ namespace Currencies.Tests
             var ondate = new DateTime(2021, 01, 01);
 
             httpTest
-                .ForCallsTo("https://www.nbrb.by/api/exrates/currencies")
+                .ForCallsTo("https://www.nbrb.by/api/exrates/currencies/298")
                 .WithVerb(HttpMethod.Get)
                 .WithQueryParam("date", ondate.ToString())
                 .RespondWith(
-                    "[{ \"Cur_ID\":1,\"Cur_ParentID\":1,\"Cur_Code\":\"008\",\"Cur_Abbreviation\":\"ALL\",\"Cur_Name\":\"Албанский лек\"" +
-                    ",\"Cur_Name_Bel\":\"Албанскі лек\",\"Cur_Name_Eng\":\"Albanian Lek\",\"Cur_QuotName\":\"1 Албанский лек\"," +
-                    "\"Cur_QuotName_Bel\":\"1 Албанскі лек\",\"Cur_QuotName_Eng\":\"1 Albanian Lek\",\"Cur_NameMulti\":\"\",\"Cur_Name_BelMulti\":\"\"," +
-                    "\"Cur_Name_EngMulti\":\"\",\"Cur_Scale\":1,\"Cur_Periodicity\":1,\"Cur_DateStart\":\"1991-01-01T00:00:00\",\"Cur_DateEnd\":\"2007-11-30T00:00:00\"}," +
-                    "{ \"Cur_ID\":2,\"Cur_ParentID\":2,\"Cur_Code\":\"012\",\"Cur_Abbreviation\":\"DZD\",\"Cur_Name\":\"Алжирский динар\"," +
-                    "\"Cur_Name_Bel\":\"Алжырскі дынар\",\"Cur_Name_Eng\":\"Algerian Dinar\",\"Cur_QuotName\":\"1 Алжирский динар\"," +
-                    "\"Cur_QuotName_Bel\":\"1 Алжырскі дынар\",\"Cur_QuotName_Eng\":\"1 Algerian Dinar\",\"Cur_NameMulti\":\"\",\"Cur_Name_BelMulti\":\"\"," +
-                    "\"Cur_Name_EngMulti\":\"\",\"Cur_Scale\":1,\"Cur_Periodicity\":1,\"Cur_DateStart\":\"1991-01-01T00:00:00\",\"Cur_DateEnd\":\"2016-06-30T00:00:00\"}," +
-                    "{ \"Cur_ID\":5,\"Cur_ParentID\":5,\"Cur_Code\":\"032\",\"Cur_Abbreviation\":\"ARS\",\"Cur_Name\":\"Аргентинское песо\"," +
-                    "\"Cur_Name_Bel\":\"Аргенцінскае песа\",\"Cur_Name_Eng\":\"Argentine Peso\",\"Cur_QuotName\":\"1 Аргентинское песо\"," +
-                    "\"Cur_QuotName_Bel\":\"1 Аргенцінскае песа\",\"Cur_QuotName_Eng\":\"1 Argentine Peso\",\"Cur_NameMulti\":\"\",\"Cur_Name_BelMulti\":\"\"," +
-                    "\"Cur_Name_EngMulti\":\"\",\"Cur_Scale\":1,\"Cur_Periodicity\":1,\"Cur_DateStart\":\"1991-01-01T00:00:00\",\"Cur_DateEnd\":\"2016-06-30T00:00:00\"}]");
+                    "{\"Cur_ID\":298,\"Date\":\"2021-01-01T00:00:00\",\"Cur_Abbreviation\":\"RUB\"," +
+                    "\"Cur_Scale\":100,\"Cur_Name\":\"Российских рублей\",\"Cur_OfficialRate\":3.4871}");
 
             // act
             var api = new BynCurrenciesApi();
             var result = await api.GetCurrencies(ondate);
 
             // assert
-            var result1 = new CurrencyModel[3]
-            {
-               new CurrencyModel
-               {
-                Id = "1",
-                Name = "Албанский лек",
-                CharCode = "ALL",
-               },
-                new CurrencyModel
-               {
-                Id = "2",
-                Name = "Алжирский динар",
-                CharCode = "DZD",
-               },
+            var result1 = new CurrencyModel[1]
+             {
                 new CurrencyModel
                 {
-                Id = "5",
-                Name = "Аргентинское песо",
-                CharCode = "ARS",
-                },
-            };
+                 Id = "298",
+                 Name = "Российских рублей",
+                 CharCode = "RUB"
+                }
+             };
+
             result.Should().BeEquivalentTo(result1);
         }
 
