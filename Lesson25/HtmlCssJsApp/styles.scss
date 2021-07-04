@@ -1,6 +1,13 @@
-$primary-color: rgb(32, 226, 14);
+$primary-color: rgb(171, 14, 233);
 
 .header {
     color: $primary-color;
-    text-align: left;
+    text-align: right;
 }
+div {
+    background-color: rgb(14, 221, 255);
+    color: rgb(96, 91, 11);
+    border: 5px solid black;
+    margin: 20px;
+    padding: 30px;
+  }
