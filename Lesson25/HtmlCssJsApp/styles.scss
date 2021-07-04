@@ -1,9 +1,5 @@
-$primary-color: rgb(171, 14, 233);
 
-.header {
-    color: $primary-color;
-    text-align: right;
-}
+
 div {
     background-color: rgb(14, 221, 255);
     color: rgb(96, 91, 11);
@@ -11,3 +7,14 @@ div {
     margin: 20px;
     padding: 30px;
   }
+
+  hr {
+    outline-style: solid;
+    color: rgb(64, 243, 9);
+    }
+
+    p {
+        color: rgb(235, 10, 10);
+        text-align: center;
+        text-decoration: dashed;
+      }
