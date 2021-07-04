@@ -1,0 +1,16 @@
+{
+  "name": "htmlcssjsapp",
+  "version": "1.0.0",
+  "description": "Test HTML-CSS-JS application",
+  "main": "index.js",
+  "scripts": {
+    "compile-css": "sass styles.scss dist/styles.css",
+    "compile-css-dev": "sass --watch styles.scss dist/styles.css"
+  },
+  "author": "a.rublevsky",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.0.2",
+    "sass": "^1.35.1"
+  }
+}
