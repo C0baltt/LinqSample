@@ -1,0 +1,21 @@
+@model User;
+
+<div class="container">
+  <div class="row">
+    <form>
+      <fieldset disabled>
+        <legend>User details</legend>
+        <div class="mb-3">
+          <label for="name-input" class="form-label">Name</label>
+          <input type="text" value="@Model.Name" id="name-input" class="form-control" placeholder="Name">
+        </div>
+        <div class="mb-3">
+          <label for="age-input" class="form-label">Age</label>
+          <input type="text" value="@Model.Age" id="age-input" class="form-control" placeholder="Age">
+        </div>
+      </fieldset>
+      <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id">Edit</a>
+      <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </form>
+  </div>
+</div>
