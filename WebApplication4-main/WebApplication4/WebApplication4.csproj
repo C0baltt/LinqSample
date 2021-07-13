@@ -4,4 +4,15 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Accounting\Accounting.csproj" />
+      <ProjectReference Include="..\Common\Common.csproj" />
+      <ProjectReference Include="..\Currencies\Currencies.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog" Version="2.10.0" />
+      <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    </ItemGroup>
+
 </Project>

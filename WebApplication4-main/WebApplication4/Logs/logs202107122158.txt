@@ -1,0 +1,2 @@
+2021-07-12 21:58:43.476 +03:00 [INF] Account with ID: accf831a-777d-46ad-bdd9-f64fb5bbe034 created
+2021-07-12 21:58:48.833 +03:00 [INF] Account with ID: acc31b52-aac2-4a37-b9eb-89c7ff083cf9 created

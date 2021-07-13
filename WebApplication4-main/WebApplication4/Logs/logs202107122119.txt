@@ -1,0 +1,2 @@
+2021-07-12 21:19:01.585 +03:00 [INF] Account with ID: 8f491eab-2912-43f4-a60c-78b15a28cb13 created
+2021-07-12 21:19:11.271 +03:00 [INF] Account with ID: b1e53405-970e-42ba-8d0f-a1c54357400a created
